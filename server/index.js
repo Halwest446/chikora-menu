@@ -560,6 +560,18 @@ app.post('/api/sync', requireAdminAuth, async (req, res) => {
   }
 });
 
+// Serve Vite production build
+const distDir = path.join(__dirname, '..', 'dist');
+if (fs.existsSync(distDir)) {
+  app.use(express.static(distDir));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(distDir, 'index.html'));
+  });
+}
+
 // Start Server after DB Init
 initDb()
   .then(() => {
