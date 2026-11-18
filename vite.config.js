@@ -8,6 +8,9 @@ export default defineConfig({
     port: 5173,
     host: '0.0.0.0',
     allowedHosts: true,
+    watch: {
+      ignored: ['**/*.MOV', '**/*.mov', '**/*.mp4', '**/*.webm', '**/*.db', '**/*.db-journal'],
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:5000',

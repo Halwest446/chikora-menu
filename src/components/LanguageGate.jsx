@@ -100,16 +100,22 @@ export const LanguageGate = ({ onEnter }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden select-none">
-      {/* Background with Dark Food Mood & Blur */}
-      <div
-        className="absolute inset-0 bg-cover bg-center scale-105 transition-transform duration-1000 ease-out"
-        style={{
-          backgroundImage: `url('https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=1920&q=80')`,
-        }}
-      />
+      {/* Background Video from IMG_6556.MOV */}
+      <div className="absolute inset-0 overflow-hidden">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=1920&q=80"
+          className="w-full h-full object-cover scale-105 transition-transform duration-1000"
+        >
+          <source src="/chikora-bg.mp4" type="video/mp4" />
+        </video>
+      </div>
       
-      {/* Ambient Gradient Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0406]/85 via-[#120609]/80 to-[#0a0406]/95 backdrop-blur-[6px]" />
+      {/* Ambient Gradient Overlays for readability and warm mood */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0406]/75 via-[#120609]/70 to-[#0a0406]/90 backdrop-blur-[2px]" />
       <div className="absolute top-1/4 -left-20 w-72 h-72 bg-[#ba181b]/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-[#f5a623]/20 rounded-full blur-3xl pointer-events-none" />
 
