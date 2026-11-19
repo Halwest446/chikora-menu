@@ -24,7 +24,8 @@ import {
   Eye,
   EyeOff,
   LogOut,
-  X
+  X,
+  Check
 } from 'lucide-react';
 
 export const AdminPanel = () => {
@@ -462,9 +463,10 @@ export const AdminPanel = () => {
                   setPasswordInput('chikora@2025');
                   setLoginError('');
                 }}
-                className="text-[11px] text-zinc-400 hover:text-amber-400 transition-colors"
+                className="inline-flex items-center gap-1.5 text-[11px] text-zinc-400 hover:text-amber-400 transition-colors"
               >
-                {isKu ? '⚡ بەکارهێنەری سەرەتایی: admin / chikora@2025' : '⚡ Default Login: admin / chikora@2025'}
+                <Key className="w-3 h-3 text-amber-400" />
+                <span>{isKu ? 'بەکارهێنەری سەرەتایی: admin / chikora@2025' : 'Default Login: admin / chikora@2025'}</span>
               </button>
             </div>
 
@@ -1079,8 +1081,9 @@ export const AdminPanel = () => {
                   {isAr ? 'أمان الحساب وتغيير كلمة المرور' : isKu ? 'ئاسایشی ئەکاونت و گۆڕینی وشەی نهێنی' : 'Account Security & Password Management'}
                 </h3>
               </div>
-              <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">
-                ✓ {isKu ? 'پارێزراوە لە هاک' : 'Protected'}
+              <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">
+                <Check className="w-3 h-3 text-emerald-400" />
+                <span>{isKu ? 'پارێزراوە لە هاک' : 'Protected'}</span>
               </span>
             </div>
 
@@ -1307,10 +1310,10 @@ export const AdminPanel = () => {
                     className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   >
                     <option value="">None</option>
-                    <option value="Best Seller">⭐ Best Seller</option>
-                    <option value="Spicy">🌶️ Spicy</option>
-                    <option value="Chef Special">👑 Chef Special</option>
-                    <option value="New">🔥 New</option>
+                    <option value="Best Seller">Best Seller</option>
+                    <option value="Spicy">Spicy</option>
+                    <option value="Chef Special">Chef Special</option>
+                    <option value="New">New</option>
                   </select>
                 </div>
               </div>
@@ -1356,8 +1359,11 @@ export const AdminPanel = () => {
                         alt="Preview"
                         className="w-10 h-10 rounded-lg object-cover border border-white/10"
                       />
-                      <div className="text-[11px] text-zinc-400">
-                        <span className="text-emerald-400 font-medium">✓ Image ready</span>
+                      <div className="text-[11px] text-zinc-400 flex flex-col">
+                        <span className="text-emerald-400 font-medium inline-flex items-center gap-1">
+                          <Check className="w-3 h-3 text-emerald-400" />
+                          <span>Image ready</span>
+                        </span>
                         <p className="truncate max-w-xs">{formImage.slice(0, 30)}...</p>
                       </div>
                     </div>
@@ -1423,8 +1429,9 @@ export const AdminPanel = () => {
                     onChange={(e) => setFormIsSpicy(e.target.checked)}
                     className="w-3.5 h-3.5 rounded text-red-500 bg-zinc-950 border-zinc-700"
                   />
-                  <span className="text-xs font-medium text-zinc-300">
-                    🌶️ {isKu ? 'خواردنی تیژە (Spicy)' : 'Spicy Item'}
+                  <span className="text-xs font-medium text-zinc-300 inline-flex items-center gap-1.5">
+                    <Flame className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+                    <span>{isKu ? 'خواردنی تیژە (Spicy)' : 'Spicy Item'}</span>
                   </span>
                 </label>
 
@@ -1435,8 +1442,9 @@ export const AdminPanel = () => {
                     onChange={(e) => setFormInStock(e.target.checked)}
                     className="w-3.5 h-3.5 rounded text-emerald-500 bg-zinc-950 border-zinc-700"
                   />
-                  <span className="text-xs font-medium text-zinc-300">
-                    ✓ {isKu ? 'بەردەستە (In Stock)' : 'In Stock'}
+                  <span className="text-xs font-medium text-zinc-300 inline-flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>{isKu ? 'بەردەستە (In Stock)' : 'In Stock'}</span>
                   </span>
                 </label>
               </div>

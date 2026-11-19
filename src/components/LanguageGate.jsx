@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check, MapPin } from 'lucide-react';
 
 // Custom Crisp Flags
 const KurdistanFlag = ({ className = "w-7 h-5" }) => (
@@ -197,7 +197,7 @@ export const LanguageGate = ({ onEnter }) => {
 
         {/* Subtle Erbil Address Hint */}
         <div className="text-[11px] text-zinc-400 flex items-center justify-center gap-1.5 font-normal">
-          <span>📍</span>
+          <MapPin className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
           <span>
             {isAr ? restaurantInfo.addressAr : isKu ? restaurantInfo.addressKu : restaurantInfo.address}
           </span>

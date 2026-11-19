@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { X, Check } from 'lucide-react';
+import { X, Check, Flame } from 'lucide-react';
 
 export const ItemModal = () => {
   const { selectedItemForModal, setSelectedItemForModal, lang, formatPrice } = useMenu();
@@ -91,8 +91,9 @@ export const ItemModal = () => {
           {/* Details & Stock Badges */}
           <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
             {item.isSpicy && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-950/60 text-red-300 border border-red-800/40 font-medium">
-                🌶️ {isAr ? 'وجبة حارة' : isKu ? 'خواردنی تیژ' : 'Spicy Dish'}
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-950/60 text-red-300 border border-red-800/40 font-medium">
+                <Flame className="w-3.5 h-3.5 text-red-400 fill-red-400" />
+                <span>{isAr ? 'وجبة حارة' : isKu ? 'خواردنی تیژ' : 'Spicy Dish'}</span>
               </span>
             )}
             <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-zinc-800 text-emerald-400 border border-emerald-500/30 font-medium">

@@ -58,7 +58,8 @@ export const MenuCard = ({ item }) => {
 
           {item.isSpicy && !item.tag?.includes('Spicy') && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-red-950/80 text-red-300 backdrop-blur-md border border-red-800/40">
-              🌶️ {isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}
+              <Flame className="w-3 h-3 text-red-400 fill-red-400" />
+              <span>{isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}</span>
             </span>
           )}
         </div>

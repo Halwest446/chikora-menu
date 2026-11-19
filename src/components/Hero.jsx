@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { MapPin, Clock, Phone, Sparkles, Flame, Award } from 'lucide-react';
+import { MapPin, Clock, Phone, Sparkles, Flame, Award, Star } from 'lucide-react';
 
 export const Hero = () => {
   const { lang, restaurantInfo, tagFilter, setTagFilter } = useMenu();
@@ -109,24 +109,24 @@ export const Hero = () => {
                 </button>
                 <button
                   onClick={() => setTagFilter(tagFilter === 'bestseller' ? 'all' : 'bestseller')}
-                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1 ${
+                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1.5 ${
                     tagFilter === 'bestseller'
                       ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-subtle'
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  <span>⭐</span>
+                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
                   <span>{isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Sellers'}</span>
                 </button>
                 <button
                   onClick={() => setTagFilter(tagFilter === 'spicy' ? 'all' : 'spicy')}
-                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1 ${
+                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1.5 ${
                     tagFilter === 'spicy'
                       ? 'bg-red-500/20 text-red-300 border border-red-500/30 shadow-subtle'
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  <span>🌶️</span>
+                  <Flame className="w-3.5 h-3.5 text-red-500 fill-red-500" />
                   <span>{isAr ? 'الحار' : isKu ? 'تیژەکان' : 'Spicy Items'}</span>
                 </button>
               </div>

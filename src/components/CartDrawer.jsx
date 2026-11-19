@@ -30,25 +30,25 @@ export const CartDrawer = () => {
     if (cart.length === 0) return;
 
     let message = isKu
-      ? `🍗 *داواکاری نوێ لە مێنیوی چیکۆرا هه‌ولێر*\n`
-      : `🍗 *New Order from Chikora Hawler*\n`;
+      ? `*داواکاری نوێ لە مێنیوی چیکۆرا هه‌ولێر*\n`
+      : `*New Order from Chikora Hawler*\n`;
 
     message += `------------------------------------\n`;
-    message += isKu ? `📍 جۆری داواکاری: ${orderType === 'delivery' ? 'گەیاندن (Delivery)' : orderType === 'dinein' ? 'لەناو هۆڵ (Dine-in)' : 'بردنەوە (Takeaway)'}\n`
-                    : `📍 Order Type: ${orderType.toUpperCase()}\n`;
+    message += isKu ? `جۆری داواکاری: ${orderType === 'delivery' ? 'گەیاندن (Delivery)' : orderType === 'dinein' ? 'لەناو هۆڵ (Dine-in)' : 'بردنەوە (Takeaway)'}\n`
+                    : `Order Type: ${orderType.toUpperCase()}\n`;
 
     if (customerName) {
-      message += isKu ? `👤 ناوی کڕیار: ${customerName}\n` : `👤 Name: ${customerName}\n`;
+      message += isKu ? `ناوی کڕیار: ${customerName}\n` : `Name: ${customerName}\n`;
     }
     if (customerPhone) {
-      message += isKu ? `📞 تەلەفۆن: ${customerPhone}\n` : `📞 Phone: ${customerPhone}\n`;
+      message += isKu ? `تەلەفۆن: ${customerPhone}\n` : `Phone: ${customerPhone}\n`;
     }
     if (customerLocation) {
-      message += isKu ? `🏠 ناونیشان / مێز: ${customerLocation}\n` : `🏠 Address / Table: ${customerLocation}\n`;
+      message += isKu ? `ناونیشان / مێز: ${customerLocation}\n` : `Address / Table: ${customerLocation}\n`;
     }
 
     message += `------------------------------------\n`;
-    message += isKu ? `🛒 *خواردنەکان:*\n` : `🛒 *Items Ordered:*\n`;
+    message += isKu ? `*خواردنەکان:*\n` : `*Items Ordered:*\n`;
 
     cart.forEach((ci, idx) => {
       const itemName = isKu ? (ci.item.nameKu || ci.item.name) : ci.item.name;
@@ -60,10 +60,10 @@ export const CartDrawer = () => {
 
     message += `------------------------------------\n`;
     message += isKu
-      ? `💰 *کۆی گشتی: ${formatPrice(cartTotal)}*\n`
-      : `💰 *Grand Total: ${formatPrice(cartTotal)}*\n`;
+      ? `*کۆی گشتی: ${formatPrice(cartTotal)}*\n`
+      : `*Grand Total: ${formatPrice(cartTotal)}*\n`;
     message += `------------------------------------\n`;
-    message += isKu ? `سوپاس بۆ هەڵبژاردنی چیکۆرا! ❤️` : `Thank you for choosing Chikora! ❤️`;
+    message += isKu ? `سوپاس بۆ هەڵبژاردنی چیکۆرا هه‌ولێر.` : `Thank you for choosing Chikora Hawler.`;
 
     window.open(`https://wa.me/${restaurantInfo.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
     setIsOrderedSuccess(true);
