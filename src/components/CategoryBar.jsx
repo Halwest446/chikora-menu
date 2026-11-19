@@ -25,11 +25,12 @@ const iconMap = {
 export const CategoryBar = () => {
   const { categories, activeCategory, setActiveCategory, items, lang } = useMenu();
   const isKu = lang === 'ku';
+  const isAr = lang === 'ar';
 
   return (
-    <div className="sticky top-20 z-30 bg-[#0e0708]/95 backdrop-blur-md border-b border-[#291318] py-3.5 shadow-md">
+    <nav className="sticky top-16 sm:top-20 z-30 bg-zinc-950/85 backdrop-blur-xl border-b border-white/[0.08] py-2.5 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 scroll-smooth">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
             const IconComponent = iconMap[cat.icon] || Flame;
@@ -43,19 +44,19 @@ export const CategoryBar = () => {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all duration-200 border flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all duration-150 border flex-shrink-0 ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#ba181b] to-[#c2410c] text-white border-[#f5a623] shadow-glow-gold scale-102'
-                    : 'bg-[#1b0d10] hover:bg-[#2a141a] text-gray-300 hover:text-white border-[#3b1920]'
+                    ? 'bg-zinc-800 text-white border-white/[0.18] shadow-subtle'
+                    : 'bg-zinc-900/50 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 border-white/[0.05]'
                 }`}
               >
-                <IconComponent className={`w-4 h-4 ${isActive ? 'text-[#ffd043]' : 'text-[#f5a623]'}`} />
+                <IconComponent className={`w-3.5 h-3.5 ${isActive ? 'text-amber-400' : 'text-zinc-400'}`} />
                 <span>
-                  {lang === 'ar' ? (cat.nameAr || cat.nameEn) : isKu ? (cat.nameKu || cat.nameEn) : cat.nameEn}
+                  {isAr ? (cat.nameAr || cat.nameEn) : isKu ? (cat.nameKu || cat.nameEn) : cat.nameEn}
                 </span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${
-                    isActive ? 'bg-black/40 text-[#ffd043]' : 'bg-[#2b1419] text-gray-400'
+                  className={`text-[10px] px-1.5 py-0.2 rounded font-medium ${
+                    isActive ? 'bg-zinc-700/80 text-zinc-200' : 'bg-zinc-800/60 text-zinc-500'
                   }`}
                 >
                   {count}
@@ -65,6 +66,6 @@ export const CategoryBar = () => {
           })}
         </div>
       </div>
-    </div>
+    </nav>
   );
 };

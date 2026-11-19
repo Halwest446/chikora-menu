@@ -1,14 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useMenu } from '../context/MenuContext';
 import { 
-  Globe, 
   Search, 
   X, 
-  Flame, 
   ArrowLeft,
   ArrowRight,
   ChevronDown,
-  Check
+  Check,
+  Globe
 } from 'lucide-react';
 
 export const Header = () => {
@@ -19,7 +18,8 @@ export const Header = () => {
     setSearchQuery,
     isAdminRoute,
     navigate,
-    openLanguageGate
+    openLanguageGate,
+    restaurantInfo
   } = useMenu();
 
   const isKu = lang === 'ku';
@@ -30,6 +30,7 @@ export const Header = () => {
 
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const langDropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
 
   // Close language dropdown on outside click
   useEffect(() => {
@@ -42,78 +43,96 @@ export const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Keyboard shortcut for search (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-40 bg-[#12080a]/95 backdrop-blur-md border-b border-[#2e151a] shadow-xl">
-      {/* Top micro announcement bar */}
-      <div className="bg-gradient-to-r from-[#ba181b] via-[#f5a623] to-[#ba181b] text-black text-xs font-bold py-1 px-4 text-center tracking-wide flex items-center justify-center gap-2">
-        <Flame className="w-3.5 h-3.5 fill-black animate-bounce" />
-        <span>
+    <header className="sticky top-0 z-40 bg-zinc-950/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
+      {/* Top micro announcement bar - clean & minimalist */}
+      <div className="bg-zinc-900/90 border-b border-white/[0.05] text-zinc-300 text-[11px] py-1 px-4 text-center tracking-wide flex items-center justify-center gap-2">
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+        <span className="font-medium">
           {isAr
-            ? '🔥 أهلاً بكم في تشيكورا هولير - أشهى وأقرمش دجاج مقلي في أربيل!'
+            ? 'أهلاً بكم في تشيكورا هولير - أشهى وأقرمش دجاج مقلي في أربيل'
             : isKu
-            ? '🔥 بەخێربێن بۆ چیکۆرا هه‌ولێر - باشترین مریشکی کریسپی و برژاو لە هەولێر!'
-            : '🔥 Welcome to Chikora Hawler - The Crispiest Golden Fried Chicken in Town!'}
+            ? 'بەخێربێن بۆ چیکۆرا هه‌ولێر - باشترین مریشکی کریسپی و برژاو لە هەولێر'
+            : 'Welcome to Chikora Hawler - The Crispiest Golden Fried Chicken in Erbil'}
         </span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-3">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
           
           {/* Logo & Brand Identity */}
           <div 
             onClick={() => navigate('/')}
-            className="flex items-center gap-3.5 cursor-pointer group select-none flex-shrink-0"
+            className="flex items-center gap-3 cursor-pointer group select-none flex-shrink-0"
           >
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#ba181b] to-[#f5a623] rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
               <img
                 src="/chikora-logo.jpeg"
-                alt="Chikora Hawler Logo"
-                className="relative w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-[#f5a623] shadow-md transform group-hover:scale-105 transition duration-300"
+                alt="Chikora Hawler"
+                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-1 ring-white/15 group-hover:ring-amber-500/50 transition-all duration-300"
               />
             </div>
 
             <div className="flex flex-col">
-              <div className="flex items-baseline gap-2">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-white group-hover:text-[#f5a623] transition-colors flex items-center gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-amber-400 transition-colors">
                   CHIKORA
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#ba181b]/30 text-[#f5a623] border border-[#ba181b]/60">
-                    HAWLER
-                  </span>
+                </span>
+                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-white/[0.06] text-amber-400 border border-white/[0.08] tracking-wider uppercase">
+                  Hawler
                 </span>
               </div>
-              <span className="text-xs sm:text-sm font-semibold text-[#f5a623] font-kurdish tracking-wider">
-                {isAr ? 'تشيكورا هولير' : 'چیکۆرا هه‌ولێر'}
+              <span className="text-[11px] font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
+                {isAr ? 'تشيكورا هولير' : isKu ? 'چیکۆرا هه‌ولێر' : 'Fast Food & Grills'}
               </span>
             </div>
           </div>
 
           {/* Desktop Search (Only on public menu) */}
           {!isAdminRoute && (
-            <div className="hidden md:flex flex-1 max-w-md mx-6">
+            <div className="hidden md:flex flex-1 max-w-md mx-4">
               <div className="relative w-full">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder={
                     isAr
-                      ? 'البحث في منيو تشيكورا...'
+                      ? 'ابحث في القائمة...'
                       : isKu
                       ? 'گەڕان لە مێنیوی چیکۆرا...'
-                      : 'Search crispy chicken, burgers, sides...'
+                      : 'Search dishes, crispy chicken, burgers...'
                   }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#1e0e12] text-white text-sm pl-10 pr-9 py-2.5 rounded-xl border border-[#3b1c22] focus:border-[#f5a623] focus:ring-2 focus:ring-[#f5a623]/20 focus:outline-none transition-all placeholder:text-gray-500"
+                  className="w-full bg-zinc-900/70 hover:bg-zinc-900 text-zinc-100 text-xs sm:text-sm pl-10 pr-16 py-2 rounded-lg border border-white/[0.08] focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 focus:outline-none transition-all placeholder:text-zinc-500"
                 />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                  {searchQuery ? (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="text-zinc-400 hover:text-white p-0.5"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  ) : (
+                    <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded">
+                      <span>⌘</span>K
+                    </kbd>
+                  )}
+                </div>
               </div>
             </div>
           )}
@@ -124,11 +143,11 @@ export const Header = () => {
             {isAdminRoute && (
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#241116] hover:bg-[#341820] text-[#f5a623] border border-[#4a222a] text-xs sm:text-sm font-bold transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-white/[0.08] text-xs font-semibold transition-all"
               >
-                {isRtl ? <ArrowRight className="w-4 h-4" /> : <ArrowLeft className="w-4 h-4" />}
+                {isRtl ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
                 <span>
-                  {isAr ? 'العودة إلى القائمة' : isKu ? 'گەڕانەوە بۆ مێنیو' : 'Back to Menu'}
+                  {isAr ? 'العودة للمنيو' : isKu ? 'گەڕانەوە بۆ مێنیو' : 'Back to Menu'}
                 </span>
               </button>
             )}
@@ -138,52 +157,36 @@ export const Header = () => {
               <button
                 type="button"
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#241116] hover:bg-[#341820] text-gray-200 hover:text-white text-xs font-bold border border-[#3d1d24] transition-all shadow-sm"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-200 hover:text-white text-xs font-semibold border border-white/[0.08] transition-all"
                 title="Select Language"
               >
-                <Globe className="w-3.5 h-3.5 text-[#f5a623]" />
+                <Globe className="w-3.5 h-3.5 text-amber-400" />
                 <span className={isRtl ? 'font-kurdish' : ''}>
                   {currentLangLabel}
                 </span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${
-                    isLangDropdownOpen ? 'rotate-180 text-[#f5a623]' : ''
+                  className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
+                    isLangDropdownOpen ? 'rotate-180 text-amber-400' : ''
                   }`}
                 />
               </button>
 
               {isLangDropdownOpen && (
-                <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-36 bg-[#1b0d10] border border-[#3e1b23] rounded-2xl shadow-2xl py-1.5 z-50 backdrop-blur-md">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLang('en');
-                      setIsLangDropdownOpen(false);
-                    }}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 text-xs font-bold transition-colors ${
-                      lang === 'en'
-                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
-                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
-                    }`}
-                  >
-                    <span>English</span>
-                    {lang === 'en' && <Check className="w-3.5 h-3.5 text-[#f5a623]" />}
-                  </button>
-
+                <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-44 bg-zinc-900/95 border border-white/[0.1] rounded-xl shadow-dialog py-1.5 z-50 backdrop-blur-xl animate-fade-in">
                   <button
                     type="button"
                     onClick={() => {
                       setLang('ku');
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 text-xs font-bold font-kurdish transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium font-kurdish transition-colors ${
                       lang === 'ku'
-                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
-                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
+                        ? 'bg-white/[0.08] text-amber-400'
+                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                     }`}
                   >
-                    <span>کوردی</span>
-                    {lang === 'ku' && <Check className="w-3.5 h-3.5 text-[#f5a623]" />}
+                    <span>کوردی (Kurdî)</span>
+                    {lang === 'ku' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
                   </button>
 
                   <button
@@ -192,27 +195,43 @@ export const Header = () => {
                       setLang('ar');
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3.5 py-2 text-xs font-bold font-kurdish transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium font-kurdish transition-colors ${
                       lang === 'ar'
-                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
-                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
+                        ? 'bg-white/[0.08] text-amber-400'
+                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
                     }`}
                   >
-                    <span>العربية</span>
-                    {lang === 'ar' && <Check className="w-3.5 h-3.5 text-[#f5a623]" />}
+                    <span>العربية (Arabic)</span>
+                    {lang === 'ar' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
                   </button>
 
-                  <div className="pt-1 mt-1 border-t border-[#311318]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLang('en');
+                      setIsLangDropdownOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium transition-colors ${
+                      lang === 'en'
+                        ? 'bg-white/[0.08] text-amber-400'
+                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                    }`}
+                  >
+                    <span>English</span>
+                    {lang === 'en' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
+                  </button>
+
+                  <div className="pt-1 mt-1 border-t border-white/[0.08]">
                     <button
                       type="button"
                       onClick={() => {
                         setIsLangDropdownOpen(false);
                         openLanguageGate();
                       }}
-                      className="w-full flex items-center gap-1.5 px-3 py-1.5 text-[11px] text-[#f5a623] hover:bg-[#281318] hover:text-white transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-zinc-400 hover:text-amber-400 hover:bg-zinc-800/60 transition-colors"
                     >
-                      <span>🌐</span>
-                      <span>{isAr ? 'شاشة اختيار اللغة' : isKu ? 'شاشەی هەڵبژاردنی زمان' : 'Language Welcome'}</span>
+                      <Globe className="w-3 h-3 text-zinc-400" />
+                      <span>{isAr ? 'شاشة الترحيب واختيار اللغة' : isKu ? 'شاشەی دەستپێک و زمانەکان' : 'Welcome Screen'}</span>
                     </button>
                   </div>
                 </div>
@@ -225,26 +244,26 @@ export const Header = () => {
         {!isAdminRoute && (
           <div className="md:hidden pb-3">
             <div className="relative w-full">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder={
                   isAr
-                    ? 'البحث في منيو تشيكورا...'
+                    ? 'ابحث في القائمة...'
                     : isKu
                     ? 'گەڕان لە مێنیوی چیکۆرا...'
-                    : 'Search chicken, burgers, meals...'
+                    : 'Search dishes, meals...'
                 }
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#1e0e12] text-white text-sm pl-10 pr-9 py-2.5 rounded-xl border border-[#3b1c22] focus:border-[#f5a623] focus:outline-none placeholder:text-gray-500"
+                className="w-full bg-zinc-900/80 text-zinc-100 text-xs pl-9 pr-8 py-2 rounded-lg border border-white/[0.08] focus:border-amber-500/50 focus:outline-none placeholder:text-zinc-500"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>

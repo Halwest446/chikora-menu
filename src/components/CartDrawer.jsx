@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMenu } from '../context/MenuContext';
-import { X, Trash2, Plus, Minus, MessageCircle, ShoppingBag, Send, MapPin, User, Phone, CheckCircle2 } from 'lucide-react';
+import { X, Trash2, Plus, Minus, MessageCircle, ShoppingBag, MapPin, User, Phone, CheckCircle2 } from 'lucide-react';
 
 export const CartDrawer = () => {
   const {
@@ -30,11 +30,11 @@ export const CartDrawer = () => {
     if (cart.length === 0) return;
 
     let message = isKu
-      ? `🍗 *داواکاری نوێ لە مێنیوی ئۆنلاینی چیکۆرا هه‌ولێر*\n`
-      : `🍗 *New Order from Chikora Hawler Online Menu*\n`;
+      ? `🍗 *داواکاری نوێ لە مێنیوی چیکۆرا هه‌ولێر*\n`
+      : `🍗 *New Order from Chikora Hawler*\n`;
 
     message += `------------------------------------\n`;
-    message += isKu ? `📍 جۆری داواکاری: ${orderType === 'delivery' ? 'گەیاندن (Delivery)' : orderType === 'dinein' ? 'لەناو ڕێستۆرانت (Dine-in)' : 'بردنەوە (Takeaway)'}\n`
+    message += isKu ? `📍 جۆری داواکاری: ${orderType === 'delivery' ? 'گەیاندن (Delivery)' : orderType === 'dinein' ? 'لەناو هۆڵ (Dine-in)' : 'بردنەوە (Takeaway)'}\n`
                     : `📍 Order Type: ${orderType.toUpperCase()}\n`;
 
     if (customerName) {
@@ -44,7 +44,7 @@ export const CartDrawer = () => {
       message += isKu ? `📞 تەلەفۆن: ${customerPhone}\n` : `📞 Phone: ${customerPhone}\n`;
     }
     if (customerLocation) {
-      message += isKu ? `🏠 ناونیشان / ژمارەی مێز: ${customerLocation}\n` : `🏠 Address / Table: ${customerLocation}\n`;
+      message += isKu ? `🏠 ناونیشان / مێز: ${customerLocation}\n` : `🏠 Address / Table: ${customerLocation}\n`;
     }
 
     message += `------------------------------------\n`;
@@ -63,7 +63,7 @@ export const CartDrawer = () => {
       ? `💰 *کۆی گشتی: ${formatPrice(cartTotal)}*\n`
       : `💰 *Grand Total: ${formatPrice(cartTotal)}*\n`;
     message += `------------------------------------\n`;
-    message += isKu ? `سوپاس بۆ هەڵبژاردنی چیکۆرا هه‌ولێر! ❤️` : `Thank you for choosing Chikora Hawler! ❤️`;
+    message += isKu ? `سوپاس بۆ هەڵبژاردنی چیکۆرا! ❤️` : `Thank you for choosing Chikora! ❤️`;
 
     window.open(`https://wa.me/${restaurantInfo.whatsapp}?text=${encodeURIComponent(message)}`, '_blank');
     setIsOrderedSuccess(true);
@@ -76,20 +76,20 @@ export const CartDrawer = () => {
     <div className="fixed inset-0 z-50 flex justify-end bg-black/75 backdrop-blur-sm animate-fade-in">
       <div 
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md bg-[#160a0d] border-l border-[#3a1820] rtl:border-l-0 rtl:border-r h-full flex flex-col shadow-2xl"
+        className="w-full max-w-md bg-zinc-900 border-l border-white/[0.08] rtl:border-l-0 rtl:border-r h-full flex flex-col shadow-dialog"
       >
         {/* Drawer Header */}
-        <div className="p-4 sm:p-5 border-b border-[#311318] flex items-center justify-between bg-[#1f0d11]">
+        <div className="p-4 border-b border-white/[0.08] flex items-center justify-between bg-zinc-950">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-[#ba181b]/30 text-[#f5a623] border border-[#ba181b]/60">
-              <ShoppingBag className="w-5 h-5" />
+            <div className="p-1.5 rounded-lg bg-zinc-800 text-amber-400 border border-white/10">
+              <ShoppingBag className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-white">
+              <h2 className="text-base font-bold text-white tracking-tight">
                 {isKu ? 'سەبەتەی داواکاری' : 'Your Order Bag'}
               </h2>
-              <span className="text-xs text-gray-400">
-                {cart.length} {isKu ? 'جۆر خواردن' : 'items selected'}
+              <span className="text-[11px] text-zinc-400">
+                {cart.length} {isKu ? 'خواردن' : 'items'}
               </span>
             </div>
           </div>
@@ -98,17 +98,17 @@ export const CartDrawer = () => {
             {cart.length > 0 && (
               <button
                 onClick={clearCart}
-                className="text-xs text-red-400 hover:text-red-300 font-semibold p-1.5"
+                className="text-xs text-zinc-400 hover:text-red-400 p-1"
                 title="Clear All"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-3.5 h-3.5" />
               </button>
             )}
             <button
               onClick={() => setIsCartOpen(false)}
-              className="p-1.5 rounded-lg bg-[#2c1318] hover:bg-[#3d1a21] text-gray-300 hover:text-white transition-colors"
+              className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -116,16 +116,16 @@ export const CartDrawer = () => {
         {/* Drawer Body */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {cart.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
-              <div className="w-16 h-16 rounded-full bg-[#271016] border border-[#441c26] flex items-center justify-center text-gray-500">
-                <ShoppingBag className="w-8 h-8 text-[#f5a623]/60" />
+            <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-2.5">
+              <div className="w-12 h-12 rounded-xl bg-zinc-800 border border-white/10 flex items-center justify-center text-zinc-400">
+                <ShoppingBag className="w-6 h-6 text-amber-400/80" />
               </div>
-              <h3 className="text-base font-bold text-white">
-                {isKu ? 'سەبەتەکەت بەتاڵە!' : 'Your Bag is Empty'}
+              <h3 className="text-sm font-bold text-white">
+                {isKu ? 'سەبەتەکەت بەتاڵە' : 'Your Bag is Empty'}
               </h3>
-              <p className="text-xs text-gray-400 max-w-xs">
+              <p className="text-xs text-zinc-400 max-w-xs leading-relaxed">
                 {isKu
-                  ? 'خواردنە بەتامەکانی چیکۆرا هەڵبژێرە و لەمێژە چێژ لە کریسپیترین مریشک ببینە.'
+                  ? 'خواردنە بەتامەکانی چیکۆرا هەڵبژێرە و چێژ لە کریسپیترین مریشک ببینە.'
                   : 'Add delicious Chikora fried chicken, burgers, and sides to get started.'}
               </p>
             </div>
@@ -136,41 +136,41 @@ export const CartDrawer = () => {
                 return (
                   <div
                     key={`${ci.item.id}-${index}`}
-                    className="flex items-center gap-3 p-3 rounded-2xl bg-[#1f0e12] border border-[#37161e] hover:border-[#f5a623]/30 transition-all"
+                    className="flex items-center gap-3 p-2.5 rounded-xl bg-zinc-950 border border-white/[0.06]"
                   >
                     <img
                       src={ci.item.image}
                       alt={ci.item.name}
-                      className="w-16 h-16 rounded-xl object-cover flex-shrink-0 bg-[#2b1218]"
+                      className="w-12 h-12 rounded-lg object-cover flex-shrink-0 bg-zinc-800"
                     />
 
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-bold text-white truncate">
+                      <h4 className="text-xs font-semibold text-white truncate">
                         {itemName}
                       </h4>
-                      <p className="text-xs font-black text-[#f5a623] mt-0.5">
+                      <p className="text-xs font-bold text-amber-400 tabular-nums mt-0.5">
                         {formatPrice(ci.item.price * ci.quantity)}
                       </p>
                       {ci.notes && (
-                        <p className="text-[11px] text-gray-400 italic truncate mt-0.5">
+                        <p className="text-[10px] text-zinc-400 italic truncate mt-0.5">
                           "{ci.notes}"
                         </p>
                       )}
                     </div>
 
-                    <div className="flex items-center gap-1.5 bg-[#2a1218] border border-[#441a23] rounded-lg p-1 flex-shrink-0">
+                    <div className="flex items-center gap-1 bg-zinc-800/80 border border-white/10 rounded-md p-0.5 flex-shrink-0">
                       <button
                         onClick={() => updateCartQuantity(index, ci.quantity - 1)}
-                        className="w-6 h-6 rounded bg-[#38181f] text-gray-300 hover:text-white flex items-center justify-center"
+                        className="w-5 h-5 rounded text-zinc-300 hover:text-white flex items-center justify-center"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
-                      <span className="w-5 text-center text-xs font-bold text-white">
+                      <span className="w-4 text-center text-xs font-bold text-white tabular-nums">
                         {ci.quantity}
                       </span>
                       <button
                         onClick={() => updateCartQuantity(index, ci.quantity + 1)}
-                        className="w-6 h-6 rounded bg-[#38181f] text-gray-300 hover:text-white flex items-center justify-center"
+                        className="w-5 h-5 rounded text-zinc-300 hover:text-white flex items-center justify-center"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -178,32 +178,32 @@ export const CartDrawer = () => {
 
                     <button
                       onClick={() => removeFromCart(index)}
-                      className="text-gray-500 hover:text-red-400 p-1"
+                      className="text-zinc-500 hover:text-red-400 p-1"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 );
               })}
 
               {/* Order Options */}
-              <div className="pt-3 border-t border-[#311318] space-y-3">
-                <label className="block text-xs font-bold text-gray-300">
-                  {isKu ? 'شێوازی وەرگرتن:' : 'Delivery Preference:'}
+              <div className="pt-3 border-t border-white/[0.06] space-y-2.5">
+                <label className="block text-xs font-medium text-zinc-300">
+                  {isKu ? 'شێوازی داواکاری:' : 'Order Type:'}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { id: 'delivery', labelEn: 'Delivery', labelKu: 'گەیاندن' },
                     { id: 'takeaway', labelEn: 'Takeaway', labelKu: 'سەفەری' },
-                    { id: 'dinein', labelEn: 'Dine-In', labelKu: 'لەناو هۆڵ' },
+                    { id: 'dinein', labelEn: 'Dine-In', labelKu: 'لە هۆڵ' },
                   ].map((t) => (
                     <button
                       key={t.id}
                       onClick={() => setOrderType(t.id)}
-                      className={`py-2 px-1 text-xs font-bold rounded-xl border text-center transition-all ${
+                      className={`py-1.5 px-1 text-xs font-semibold rounded-lg border text-center transition-all ${
                         orderType === t.id
-                          ? 'bg-[#ba181b] text-white border-[#f5a623]'
-                          : 'bg-[#220f14] text-gray-400 border-[#38161e]'
+                          ? 'bg-zinc-800 text-white border-white/20'
+                          : 'bg-zinc-950 text-zinc-400 border-white/[0.06]'
                       }`}
                     >
                       {isKu ? t.labelKu : t.labelEn}
@@ -213,37 +213,37 @@ export const CartDrawer = () => {
 
                 <div className="space-y-2 pt-1">
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+                    <User className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
                     <input
                       type="text"
                       placeholder={isKu ? 'ناوی بەڕێزت' : 'Your Full Name'}
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
-                      className="w-full bg-[#1e0e12] border border-[#38161e] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-[#f5a623]"
+                      className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+                    <Phone className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
                     <input
                       type="text"
                       placeholder={isKu ? 'ژمارەی مۆبایل' : 'Phone Number'}
                       value={customerPhone}
                       onChange={(e) => setCustomerPhone(e.target.value)}
-                      className="w-full bg-[#1e0e12] border border-[#38161e] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-[#f5a623]"
+                      className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+                    <MapPin className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500" />
                     <input
                       type="text"
                       placeholder={
                         orderType === 'dinein'
                           ? (isKu ? 'ژمارەی مێز (بۆ نموونە: مێزی ٧)' : 'Table Number (e.g. Table 7)')
-                          : (isKu ? 'گەڕەک / ناونیشانی ورد لە هەولێر' : 'Erbil Neighborhood / Delivery Address')
+                          : (isKu ? 'ناونیشانی ورد لە هەولێر' : 'Erbil Delivery Address')
                       }
                       value={customerLocation}
                       onChange={(e) => setCustomerLocation(e.target.value)}
-                      className="w-full bg-[#1e0e12] border border-[#38161e] rounded-xl pl-9 pr-3 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-[#f5a623]"
+                      className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder:text-zinc-500 focus:outline-none focus:border-amber-500/50"
                     />
                   </div>
                 </div>
@@ -254,29 +254,29 @@ export const CartDrawer = () => {
 
         {/* Drawer Footer */}
         {cart.length > 0 && (
-          <div className="p-4 sm:p-5 bg-[#1a0c0f] border-t border-[#34151b] space-y-3">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-400 font-medium">
-                {isKu ? 'کۆی گشتی داواکاری:' : 'Order Subtotal:'}
+          <div className="p-4 bg-zinc-950 border-t border-white/[0.08] space-y-3">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
+              <span className="text-zinc-400 font-medium">
+                {isKu ? 'کۆی گشتی:' : 'Subtotal:'}
               </span>
-              <span className="text-xl font-black text-[#f5a623]">
+              <span className="text-base sm:text-lg font-bold text-white tabular-nums">
                 {formatPrice(cartTotal)}
               </span>
             </div>
 
             {isOrderedSuccess && (
-              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-950/80 border border-emerald-600/50 text-emerald-300 text-xs font-semibold">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>{isKu ? 'داواکاری ئامادەکرا و نێردرا بۆ واتسئەپ!' : 'Order formatted and opened in WhatsApp!'}</span>
+              <div className="flex items-center gap-1.5 p-2 rounded-lg bg-emerald-950/80 border border-emerald-600/40 text-emerald-300 text-xs font-medium">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{isKu ? 'داواکاری ئامادەکرا لە واتسئەپ!' : 'Order opened in WhatsApp!'}</span>
               </div>
             )}
 
             <button
               onClick={handleSendWhatsApp}
-              className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 via-emerald-500 to-emerald-600 hover:from-emerald-500 hover:to-emerald-400 text-white font-black text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/40 transition-all active:scale-98"
+              className="w-full py-2.5 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all active:scale-98"
             >
-              <MessageCircle className="w-5 h-5 fill-white" />
-              <span>{isKu ? 'ناردنی داواکاری لە ڕێگەی واتسئەپ' : 'Send Order via WhatsApp'}</span>
+              <MessageCircle className="w-4 h-4 fill-white" />
+              <span>{isKu ? 'ناردن بۆ واتسئەپ' : 'Order via WhatsApp'}</span>
             </button>
           </div>
         )}

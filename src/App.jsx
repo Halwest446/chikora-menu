@@ -8,7 +8,7 @@ import { ItemModal } from './components/ItemModal';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
 import { LanguageGate } from './components/LanguageGate';
-import { Search, Flame } from 'lucide-react';
+import { Search, Utensils } from 'lucide-react';
 
 const MainContent = () => {
   const {
@@ -29,7 +29,7 @@ const MainContent = () => {
   // If user opens public menu and hasn't clicked "View Menu", show Language Selection Gateway
   if (!isAdminRoute && !hasEnteredMenu) {
     return (
-      <div className="min-h-screen bg-[#0e0708] text-[#fcfaf7]">
+      <div className="min-h-screen bg-zinc-950 text-zinc-100">
         <LanguageGate onEnter={enterMenu} />
       </div>
     );
@@ -66,7 +66,7 @@ const MainContent = () => {
   const activeCategoryObj = categories.find((c) => c.id === activeCategory);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0e0708] text-[#fcfaf7]">
+    <div className="min-h-screen flex flex-col bg-zinc-950 text-zinc-100">
       <Header />
 
       {isAdminRoute ? (
@@ -79,14 +79,14 @@ const MainContent = () => {
           <CategoryBar />
 
           {/* Menu Items Section */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             
             {/* Section Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 mb-8 border-b border-[#291318] pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 border-b border-white/[0.08] pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-[#ba181b]" />
-                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                  <Utensils className="w-4 h-4 text-amber-400" />
+                  <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
                     {isAr
                       ? activeCategory === 'all'
                         ? 'قائمة تشيكورا الكاملة'
@@ -100,52 +100,49 @@ const MainContent = () => {
                         : activeCategoryObj?.nameEn || activeCategory}
                   </h2>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                <p className="text-xs sm:text-sm text-zinc-400 mt-1 font-normal">
                   {isAr
-                    ? `عرض (${filteredItems.length}) من الأطباق والوجبات الشهية`
+                    ? `عرض ${filteredItems.length} من الوجبات والأطباق`
                     : isKu
-                    ? `پیشاندانی (${filteredItems.length}) لە خواردنە بەتامەکان`
-                    : `Showing ${filteredItems.length} delicious items`}
+                    ? `پیشاندانی ${filteredItems.length} خواردن`
+                    : `Showing ${filteredItems.length} dishes`}
                 </p>
               </div>
 
               {searchQuery && (
-                <div className="text-xs text-[#f5a623] font-semibold bg-[#210f13] px-3 py-1.5 rounded-lg border border-[#3b1820]">
-                  {isAr
-                    ? `نتائج البحث عن: "${searchQuery}"`
-                    : isKu
-                    ? `ئەنجامەکانی گەڕان بۆ: "${searchQuery}"`
-                    : `Filtered by: "${searchQuery}"`}
+                <div className="inline-flex items-center gap-1.5 text-xs text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-lg border border-amber-500/20 font-medium">
+                  <span>{isAr ? 'بحث عن:' : isKu ? 'گەڕان بۆ:' : 'Query:'}</span>
+                  <span className="font-semibold text-white">"{searchQuery}"</span>
                 </div>
               )}
             </div>
 
             {/* Empty State */}
             {filteredItems.length === 0 ? (
-              <div className="py-20 text-center space-y-4 bg-[#160a0d] rounded-3xl border border-[#311318] p-8">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#271016] border border-[#441a24] flex items-center justify-center text-gray-500">
-                  <Search className="w-8 h-8 text-[#f5a623]" />
+              <div className="py-20 text-center space-y-4 bg-zinc-900/40 rounded-xl border border-white/[0.08] p-8 max-w-xl mx-auto">
+                <div className="w-12 h-12 mx-auto rounded-full bg-zinc-800 border border-white/10 flex items-center justify-center text-zinc-400">
+                  <Search className="w-5 h-5 text-amber-400" />
                 </div>
-                <h3 className="text-lg font-bold text-white">
-                  {isAr ? 'لم يتم العثور على أي وجبة!' : isKu ? 'هیچ خواردنێک نەدۆزرایەوە!' : 'No dishes found'}
+                <h3 className="text-base font-bold text-white">
+                  {isAr ? 'لم يتم العثور على أي وجبة' : isKu ? 'هیچ خواردنێک نەدۆزرایەوە' : 'No items match your criteria'}
                 </h3>
-                <p className="text-xs text-gray-400 max-w-sm mx-auto">
+                <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
                   {isAr
-                    ? 'لا توجد وجبات تطابق بحثك حالياً. يرجى تجربة كلمات بحث أخرى أو اختيار قسم آخر.'
+                    ? 'جرب البحث بكلمات أخرى أو اختر قسماً آخر من القائمة أعلاه.'
                     : isKu
-                    ? 'هیچ خواردنێک لەگەڵ وشەی گەڕانەکەت ناگونجێت. تکایە وشەیەکی تر تاقیبکەرەوە یان فلتەرەکە لابدە.'
-                    : 'We could not find any items matching your search or active filters. Try searching for chicken, burger, or select another category.'}
+                    ? 'تکایە وشەیەکی تر تاقیبکەرەوە یان فلتەری پۆلەکان بگۆڕە.'
+                    : 'Try checking your spelling or selecting another category from the bar above.'}
                 </p>
               </div>
             ) : (
               /* Grid of Cards */
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
                 {filteredItems.map((item) => (
                   <MenuCard key={item.id} item={item} />
                 ))}
               </div>
             )}
-          </div>
+          </section>
 
           <Footer />
 

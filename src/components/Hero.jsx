@@ -6,145 +6,159 @@ export const Hero = () => {
   const { lang, restaurantInfo, tagFilter, setTagFilter } = useMenu();
   const isKu = lang === 'ku';
   const isAr = lang === 'ar';
-  const isRtl = isKu || isAr;
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-[#180a0d] via-[#14080a] to-[#0e0708] border-b border-[#2d151a]">
-      {/* Background ambient decorative glow & patterns */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-[#ba181b]/15 via-[#f5a623]/10 to-transparent blur-3xl pointer-events-none" />
-      <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-[#f5a623]/10 blur-3xl pointer-events-none" />
-      <div className="absolute top-32 -left-24 w-80 h-80 rounded-full bg-[#ba181b]/15 blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-zinc-950 border-b border-white/[0.08]">
+      {/* Subtle background ambient light */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-72 bg-gradient-to-b from-amber-500/[0.07] via-red-500/[0.03] to-transparent blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-14 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Main Info */}
-          <div className="lg:col-span-7 space-y-4 text-center lg:text-left rtl:lg:text-right">
+          <div className="lg:col-span-8 space-y-5 text-center lg:text-left rtl:lg:text-right">
             
             {/* Live Status Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#241115] border border-[#482029] text-xs font-semibold text-[#f5a623]">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-              <span className="text-emerald-400 font-bold">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-white/[0.08] text-xs">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              <span className="text-emerald-400 font-semibold">
                 {isAr ? 'مفتوح الآن' : isKu ? 'ئێستا کراوەیە' : 'Open Now'}
               </span>
-              <span className="text-gray-400">•</span>
-              <Clock className="w-3.5 h-3.5 text-gray-400" />
-              <span className="text-gray-300">
+              <span className="text-zinc-600">•</span>
+              <Clock className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="text-zinc-300">
                 {isAr ? restaurantInfo.openingHoursAr : isKu ? restaurantInfo.openingHoursKu : restaurantInfo.openingHours}
               </span>
             </div>
 
             {/* Slogan & Title */}
             <div>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-5xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
                 {isAr ? (
                   <>
-                    أهلاً بكم في <span className="gold-text-gradient">تشيكورا هولير</span>
+                    أهلاً بكم في <span className="text-gradient-gold">تشيكورا هولير</span>
                   </>
                 ) : isKu ? (
                   <>
-                    بەخێربێن بۆ <span className="gold-text-gradient">چیکۆرا هه‌ولێر</span>
+                    بەخێربێن بۆ <span className="text-gradient-gold">چیکۆرا هه‌ولێر</span>
                   </>
                 ) : (
                   <>
                     Taste The Legendary <br className="hidden sm:inline" />
-                    <span className="gold-text-gradient">Chikora Crunch</span>
+                    <span className="text-gradient-gold">Chikora Crunch</span>
                   </>
                 )}
               </h1>
-              <p className="mt-3 text-sm sm:text-base text-gray-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              <p className="mt-3 text-sm sm:text-base text-zinc-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
                 {isAr ? restaurantInfo.sloganAr : isKu ? restaurantInfo.sloganKu : restaurantInfo.slogan}
               </p>
             </div>
 
-            {/* Badges / Highlights */}
+            {/* Value Highlights Chips */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start rtl:lg:justify-start gap-2 pt-1">
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-lg bg-[#221014] text-amber-300 border border-[#421d25]">
-                <Flame className="w-3.5 h-3.5 text-[#ba181b]" />
-                {isAr ? 'دجاج طازج يومياً 100%' : isKu ? 'مریشکی تازەی ڕۆژانە' : '100% Fresh Daily Chicken'}
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-900 text-zinc-300 border border-white/[0.06]">
+                <Flame className="w-3.5 h-3.5 text-red-500" />
+                <span>{isAr ? 'دجاج طازج يومياً 100%' : isKu ? 'مریشکی تازەی ڕۆژانە' : '100% Fresh Daily Chicken'}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-lg bg-[#221014] text-amber-300 border border-[#421d25]">
-                <Sparkles className="w-3.5 h-3.5 text-[#f5a623]" />
-                {isAr ? 'صلصة جديدة بنكهة تشيكورا' : isKu ? 'سۆسی نوێ بە تامی چیکۆرا' : 'New Signature Chikora Sauce'}
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-900 text-zinc-300 border border-white/[0.06]">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>{isAr ? 'صلصات تشيكورا السرية' : isKu ? 'سۆسی تایبەتی چیکۆرا' : 'Signature Secret Sauces'}</span>
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-lg bg-[#221014] text-amber-300 border border-[#421d25]">
-                <Award className="w-3.5 h-3.5 text-yellow-400" />
-                {isAr ? 'خدمة توصيل سريعة في أربيل' : isKu ? 'خزمەتگوزاری گەیاندنی خێرا' : 'Fast Hawler Delivery'}
+              <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-md bg-zinc-900 text-zinc-300 border border-white/[0.06]">
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <span>{isAr ? 'توصيل سريع لكافة أربيل' : isKu ? 'گەیاندنی خێرا لە هەولێر' : 'Fast Delivery Across Erbil'}</span>
               </span>
             </div>
 
-            {/* Action Bar (Address & Call) */}
+            {/* Contact & Location Strip */}
             <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start rtl:lg:justify-start gap-3">
               <a
                 href={`tel:${restaurantInfo.phone}`}
                 dir="ltr"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#231216] hover:bg-[#341b21] text-gray-200 border border-[#431f28] font-bold text-xs sm:text-sm transition-all"
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-white/[0.08] text-xs sm:text-sm font-semibold transition-all group"
               >
-                <Phone className="w-4 h-4 text-[#f5a623] flex-shrink-0" />
-                <bdi dir="ltr" className="font-sans font-bold tracking-wide">{restaurantInfo.phone}</bdi>
+                <Phone className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform flex-shrink-0" />
+                <bdi dir="ltr" className="font-sans tracking-wide">{restaurantInfo.phone}</bdi>
               </a>
 
-              <div className="inline-flex items-center gap-1.5 text-xs text-gray-400 bg-[#1c0d10] px-3 py-2 rounded-xl border border-[#38161d]">
-                <MapPin className="w-3.5 h-3.5 text-[#ba181b]" />
+              <div className="inline-flex items-center gap-2 text-xs text-zinc-400 bg-zinc-900/50 px-3 py-2 rounded-lg border border-white/[0.05]">
+                <MapPin className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
                 <span>{isAr ? restaurantInfo.addressAr : isKu ? restaurantInfo.addressKu : restaurantInfo.address}</span>
               </div>
             </div>
 
-            {/* Tag Quick Filters */}
-            <div className="pt-3 border-t border-[#291318] flex items-center justify-center lg:justify-start rtl:lg:justify-start gap-2 text-xs">
-              <span className="text-gray-400 font-medium">
-                {isAr ? 'تصفية سريعة:' : isKu ? 'فلتەرکردنی خێرا:' : 'Quick Filters:'}
+            {/* Segmented Quick Filters */}
+            <div className="pt-4 border-t border-white/[0.08] flex items-center justify-center lg:justify-start rtl:lg:justify-start gap-2 text-xs">
+              <span className="text-zinc-500 font-medium">
+                {isAr ? 'تصفية سريعة:' : isKu ? 'فلتەرکردنی خێرا:' : 'Filter:'}
               </span>
-              <button
-                onClick={() => setTagFilter('all')}
-                className={`px-3 py-1 rounded-full font-bold transition-all ${
-                  tagFilter === 'all'
-                    ? 'bg-[#f5a623] text-black shadow-glow-gold'
-                    : 'bg-[#1e0e12] text-gray-400 hover:text-white'
-                }`}
-              >
-                {isAr ? 'الكل' : isKu ? 'هەموو' : 'All'}
-              </button>
-              <button
-                onClick={() => setTagFilter(tagFilter === 'bestseller' ? 'all' : 'bestseller')}
-                className={`px-3 py-1 rounded-full font-bold transition-all ${
-                  tagFilter === 'bestseller'
-                    ? 'bg-[#f5a623] text-black shadow-glow-gold'
-                    : 'bg-[#1e0e12] text-gray-400 hover:text-white'
-                }`}
-              >
-                ⭐ {isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترینەکان' : 'Best Sellers'}
-              </button>
-              <button
-                onClick={() => setTagFilter(tagFilter === 'spicy' ? 'all' : 'spicy')}
-                className={`px-3 py-1 rounded-full font-bold transition-all ${
-                  tagFilter === 'spicy'
-                    ? 'bg-[#ba181b] text-white shadow-glow-red'
-                    : 'bg-[#1e0e12] text-gray-400 hover:text-white'
-                }`}
-              >
-                🌶️ {isAr ? 'الحار' : isKu ? 'تیژەکان' : 'Spicy Items'}
-              </button>
+
+              <div className="inline-flex p-0.5 rounded-lg bg-zinc-900 border border-white/[0.08]">
+                <button
+                  onClick={() => setTagFilter('all')}
+                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all ${
+                    tagFilter === 'all'
+                      ? 'bg-zinc-800 text-white shadow-subtle'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  {isAr ? 'الكل' : isKu ? 'هەموو' : 'All'}
+                </button>
+                <button
+                  onClick={() => setTagFilter(tagFilter === 'bestseller' ? 'all' : 'bestseller')}
+                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1 ${
+                    tagFilter === 'bestseller'
+                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-subtle'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  <span>⭐</span>
+                  <span>{isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Sellers'}</span>
+                </button>
+                <button
+                  onClick={() => setTagFilter(tagFilter === 'spicy' ? 'all' : 'spicy')}
+                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1 ${
+                    tagFilter === 'spicy'
+                      ? 'bg-red-500/20 text-red-300 border border-red-500/30 shadow-subtle'
+                      : 'text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  <span>🌶️</span>
+                  <span>{isAr ? 'الحار' : isKu ? 'تیژەکان' : 'Spicy Items'}</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Large Hero Visual / Crest */}
-          <div className="lg:col-span-5 flex justify-center">
-            <div className="relative group">
-              {/* Outer Golden Aura */}
-              <div className="absolute -inset-4 rounded-full bg-gradient-to-tr from-[#ba181b] via-[#f5a623] to-[#ffd043] opacity-40 blur-2xl group-hover:opacity-70 transition duration-700 animate-pulse"></div>
+          {/* Clean Brand Showcase Box */}
+          <div className="lg:col-span-4 flex justify-center">
+            <div className="relative group max-w-xs w-full">
+              {/* Subtle ambient backplate */}
+              <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-b from-white/[0.1] to-white/[0.02] opacity-75 group-hover:opacity-100 transition duration-300" />
               
-              <div className="relative p-2 rounded-3xl bg-gradient-to-b from-[#2b1419] to-[#120709] border-2 border-[#f5a623]/60 shadow-2xl">
-                <img
-                  src="/chikora-logo.jpeg"
-                  alt="Chikora Hawler Rooster"
-                  className="w-56 h-56 sm:w-72 sm:h-72 object-contain rounded-2xl drop-shadow-[0_15px_25px_rgba(0,0,0,0.8)] transform group-hover:scale-102 transition duration-500"
-                />
+              <div className="relative p-5 rounded-2xl bg-zinc-900/90 border border-white/[0.08] shadow-card flex flex-col items-center text-center">
+                <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-xl overflow-hidden bg-zinc-950 p-2 border border-white/[0.06] mb-4">
+                  <img
+                    src="/chikora-logo.jpeg"
+                    alt="Chikora Hawler Rooster Crest"
+                    className="w-full h-full object-contain rounded-lg group-hover:scale-105 transition duration-500"
+                  />
+                </div>
 
-                {/* Floating mini badge */}
-                <div className="absolute -bottom-3 -right-3 bg-gradient-to-r from-[#ba181b] to-[#800f13] border-2 border-[#f5a623] text-white px-3.5 py-1.5 rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-black">
-                  <Flame className="w-4 h-4 text-[#ffd043] fill-[#ffd043]" />
-                  <span>ORIGINAL CRUNCH</span>
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+                    <Flame className="w-3 h-3 text-amber-400 fill-amber-400" />
+                    <span>Original Recipe</span>
+                  </div>
+                  <h3 className="text-sm font-bold text-white tracking-wide">
+                    CHIKORA HAWLER
+                  </h3>
+                  <p className="text-[11px] text-zinc-400">
+                    {isAr ? 'أقرمش دجاج على الإطلاق' : isKu ? 'کریسپیترین و بەتامترین مریشک' : 'Erbil\'s Favorite Crispy Chicken'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -152,6 +166,6 @@ export const Hero = () => {
 
         </div>
       </div>
-    </div>
+    </section>
   );
 };

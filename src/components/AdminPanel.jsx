@@ -6,22 +6,17 @@ import {
   Trash2,
   Upload,
   Image as ImageIcon,
-  Check,
-  X,
   Search,
   Lock,
-  Unlock,
   RefreshCw,
   Download,
   UploadCloud,
   Layers,
   Settings,
-  DollarSign,
   AlertCircle,
   ShieldCheck,
   ExternalLink,
   Flame,
-  Star,
   CheckCircle2,
   Filter,
   User,
@@ -29,7 +24,7 @@ import {
   Eye,
   EyeOff,
   LogOut,
-  ShieldAlert
+  X
 } from 'lucide-react';
 
 export const AdminPanel = () => {
@@ -53,7 +48,6 @@ export const AdminPanel = () => {
     navigate,
     isDbConnected,
     isAdminAuthenticated,
-    setIsAdminAuthenticated,
     adminUser,
     loginAdmin,
     logoutAdmin,
@@ -62,7 +56,6 @@ export const AdminPanel = () => {
 
   const isKu = lang === 'ku';
   const isAr = lang === 'ar';
-  const isRtl = isKu || isAr;
 
   // Authentication & Login State
   const [usernameInput, setUsernameInput] = useState('');
@@ -84,7 +77,7 @@ export const AdminPanel = () => {
 
   // Modal State for Add / Edit Item
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState(null); // null if adding new
+  const [editingItem, setEditingItem] = useState(null);
 
   // Item Form Fields
   const [formName, setFormName] = useState('');
@@ -262,7 +255,7 @@ export const AdminPanel = () => {
     });
   };
 
-  // Handle local image file upload (auto-compressed to high-quality web format)
+  // Handle local image file upload
   const handleImageFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -364,36 +357,32 @@ export const AdminPanel = () => {
     return matchesSearch && matchesCat;
   });
 
-  // If not authenticated, render Login Screen
+  // If not authenticated, render Clean Modern Login Screen
   if (!isAdminAuthenticated) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-[#180b0e] border border-[#3a1820] rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-36 h-36 bg-[#f5a623]/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-36 h-36 bg-[#ba181b]/15 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="text-center space-y-3">
-            <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-[#ba181b] to-[#f5a623] p-0.5 shadow-glow-gold flex items-center justify-center">
-              <div className="w-full h-full bg-[#160a0d] rounded-2xl flex items-center justify-center">
-                <ShieldCheck className="w-8 h-8 text-[#f5a623]" />
-              </div>
+        <div className="w-full max-w-sm bg-zinc-900 border border-white/[0.1] rounded-2xl p-7 shadow-dialog space-y-6 relative">
+          
+          <div className="text-center space-y-2">
+            <div className="w-12 h-12 mx-auto rounded-xl bg-zinc-800 border border-white/10 flex items-center justify-center text-amber-400">
+              <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-2xl font-black text-white">
-                {isAr ? 'تسجيل دخول لوحة الإدارة' : isKu ? 'چوونەژوورەوەی بەڕێوەبەری چیکۆرا' : 'Chikora Admin Login'}
+              <h2 className="text-xl font-bold text-white tracking-tight">
+                {isAr ? 'تسجيل دخول الإدارة' : isKu ? 'چوونەژوورەوەی بەڕێوەبەر' : 'Admin Portal'}
               </h2>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-zinc-400 mt-0.5">
                 {isAr
-                  ? 'أدخل اسم المستخدم وكلمة المرور المشفرة للوصول'
+                  ? 'أدخل بيانات الدخول لإدارة منيو تشيكورا'
                   : isKu
-                  ? 'ناوی بەکارهێنەر و وشەی نهێنی بنووسە بۆ بەڕێوەبردنی مێنیو'
-                  : 'Enter verified credentials to manage dishes, prices, and settings'}
+                  ? 'زانیارییەکان بنووسە بۆ بەڕێوەبردنی مێنیو'
+                  : 'Manage dishes, prices, and restaurant settings'}
               </p>
             </div>
           </div>
 
           {loginError && (
-            <div className="p-3 rounded-xl bg-red-950/60 border border-red-800/60 text-red-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-lg bg-red-950/60 border border-red-800/40 text-red-300 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -401,8 +390,8 @@ export const AdminPanel = () => {
 
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-gray-300 mb-1.5 flex items-center gap-1.5">
-                <User className="w-3.5 h-3.5 text-[#f5a623]" />
+              <label className="block text-xs font-medium text-zinc-300 mb-1 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-zinc-400" />
                 <span>{isAr ? 'اسم المستخدم:' : isKu ? 'ناوی بەکارهێنەر:' : 'Username:'}</span>
               </label>
               <input
@@ -414,14 +403,14 @@ export const AdminPanel = () => {
                 }}
                 placeholder="admin"
                 autoComplete="username"
-                className="w-full bg-[#230f14] border border-[#441a24] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#f5a623] transition-colors"
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors"
                 autoFocus
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-300 mb-1.5 flex items-center gap-1.5">
-                <Key className="w-3.5 h-3.5 text-[#f5a623]" />
+              <label className="block text-xs font-medium text-zinc-300 mb-1 flex items-center gap-1.5">
+                <Key className="w-3.5 h-3.5 text-zinc-400" />
                 <span>{isAr ? 'كلمة المرور:' : isKu ? 'وشەی نهێنی:' : 'Password:'}</span>
               </label>
               <div className="relative">
@@ -434,14 +423,14 @@ export const AdminPanel = () => {
                   }}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className="w-full bg-[#230f14] border border-[#441a24] rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-[#f5a623] transition-colors pr-10"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 transition-colors pr-9"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 </button>
               </div>
             </div>
@@ -449,23 +438,23 @@ export const AdminPanel = () => {
             <button
               type="submit"
               disabled={loginLoading}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#ba181b] to-[#990012] hover:from-[#c4151c] hover:to-[#ba181b] text-white font-black text-sm shadow-glow-red transition-all active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs sm:text-sm transition-all active:scale-98 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loginLoading ? (
                 <>
                   <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>{isKu ? 'پشکنینی زانیارییەکان...' : 'Authenticating...'}</span>
+                  <span>{isKu ? 'پشکنین...' : 'Authenticating...'}</span>
                 </>
               ) : (
                 <>
-                  <Lock className="w-4 h-4" />
-                  <span>{isAr ? 'تسجيل الدخول' : isKu ? 'چوونەژوورەوەی پارێزراو' : 'Secure Login'}</span>
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>{isAr ? 'تسجيل الدخول' : isKu ? 'چوونەژوورەوە' : 'Sign In'}</span>
                 </>
               )}
             </button>
 
-            {/* Quick autofill for default admin */}
-            <div className="pt-2 text-center border-t border-[#311318]">
+            {/* Quick autofill hint */}
+            <div className="pt-2 text-center border-t border-white/[0.06]">
               <button
                 type="button"
                 onClick={() => {
@@ -473,9 +462,9 @@ export const AdminPanel = () => {
                   setPasswordInput('chikora@2025');
                   setLoginError('');
                 }}
-                className="text-[11px] text-gray-400 hover:text-[#f5a623] transition-colors"
+                className="text-[11px] text-zinc-400 hover:text-amber-400 transition-colors"
               >
-                {isKu ? '⚡ داخڵکردنی خێرای سەرەتایی: admin / chikora@2025' : '⚡ Default Credentials: admin / chikora@2025'}
+                {isKu ? '⚡ بەکارهێنەری سەرەتایی: admin / chikora@2025' : '⚡ Default Login: admin / chikora@2025'}
               </button>
             </div>
 
@@ -483,9 +472,9 @@ export const AdminPanel = () => {
               <button
                 type="button"
                 onClick={() => navigate('/')}
-                className="text-xs text-gray-400 hover:text-white transition-colors"
+                className="text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
               >
-                ← {isKu ? 'گەڕانەوە بۆ مێنیوی سەرەکی' : 'Back to Public Menu'}
+                ← {isKu ? 'گەڕانەوە بۆ مێنیو' : 'Back to Public Menu'}
               </button>
             </div>
           </form>
@@ -499,146 +488,146 @@ export const AdminPanel = () => {
       
       {/* Toast Alert */}
       {successToast && (
-        <div className="fixed top-24 right-6 z-50 flex items-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-2xl animate-bounce">
-          <CheckCircle2 className="w-5 h-5" />
+        <div className="fixed top-20 right-6 z-50 flex items-center gap-2 px-3.5 py-2.5 rounded-lg bg-zinc-900 border border-emerald-500/40 text-emerald-300 font-semibold text-xs shadow-dialog animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
           <span>{successToast}</span>
         </div>
       )}
 
       {/* Top Header & Overview Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#1a0c0f] border border-[#3b1820] rounded-3xl p-6 shadow-xl">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#ba181b] to-[#f5a623] p-0.5 shadow-glow-gold flex-shrink-0">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 shadow-card">
+        <div className="flex items-center gap-3.5">
+          <div className="w-12 h-12 rounded-xl bg-zinc-950 p-1 border border-white/10 flex-shrink-0">
             <img
               src="/chikora-logo.jpeg"
               alt="Chikora Logo"
-              className="w-full h-full object-cover rounded-2xl"
+              className="w-full h-full object-cover rounded-lg"
             />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-2xl font-black text-white">
-                {isKu ? 'پانێڵی بەڕێوەبردنی چیکۆرا هه‌ولێر' : 'Chikora Hawler Management'}
+              <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                {isKu ? 'پانێڵی بەڕێوەبردنی چیکۆرا' : 'Chikora Management'}
               </h1>
-              <span className={`px-2.5 py-0.5 text-[10px] font-black rounded-full border flex items-center gap-1 ${
+              <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border flex items-center gap-1 ${
                 isDbConnected
-                  ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                  : 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                  : 'bg-amber-500/10 text-amber-300 border-amber-500/30'
               }`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${isDbConnected ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-                <span>{isDbConnected ? 'SQLITE DATABASE LIVE' : 'LOCAL CACHE'}</span>
+                <span>{isDbConnected ? 'SQLITE LIVE' : 'LOCAL CACHE'}</span>
               </span>
             </div>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-zinc-400 mt-0.5">
               {isKu
-                ? 'لێرە دەتوانیت خواردنی نوێ زیاد بکەیت، وێنە و نرخ بگۆڕیت، و بەڕێوەی ببەیت.'
-                : 'Upload items, update prices, manage categories, and customize restaurant settings.'}
+                ? 'بەڕێوەبردنی تەواوی خواردنەکان، پۆلەکان و ڕێکخستنی نرخ'
+                : 'Upload items, update prices, manage categories, and customize menu.'}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Active Admin Badge */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#230f14] border border-[#441a24] text-xs font-bold text-amber-300">
-            <User className="w-3.5 h-3.5 text-[#f5a623]" />
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-800 text-xs font-medium text-zinc-300 border border-white/[0.06]">
+            <User className="w-3.5 h-3.5 text-amber-400" />
             <span>{adminUser?.username || 'admin'}</span>
           </div>
 
           <button
             onClick={handleOpenAdd}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#ba181b] via-[#c2410c] to-[#f5a623] text-white font-black text-xs sm:text-sm shadow-glow-red hover:brightness-110 active:scale-95 transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs shadow-subtle active:scale-95 transition-all"
           >
-            <Plus className="w-4 h-4 stroke-[3]" />
-            <span>{isKu ? 'زیادکردنی خواردنی نوێ' : 'Upload New Item'}</span>
+            <Plus className="w-3.5 h-3.5 stroke-[3]" />
+            <span>{isKu ? 'خواردنی نوێ' : 'Add Item'}</span>
           </button>
 
           <button
             onClick={() => navigate('/')}
-            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-[#281217] hover:bg-[#381820] text-gray-300 hover:text-white border border-[#481e27] text-xs font-bold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-white/[0.06] text-xs font-semibold transition-colors"
           >
-            <ExternalLink className="w-4 h-4 text-[#f5a623]" />
+            <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
             <span>{isKu ? 'بینینی مێنیو' : 'Live Menu'}</span>
           </button>
 
           <button
             onClick={logoutAdmin}
-            className="flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-red-950/40 hover:bg-red-900/60 text-red-300 hover:text-red-200 border border-red-800/40 text-xs font-bold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-zinc-800 hover:bg-red-950/40 text-zinc-400 hover:text-red-300 border border-white/[0.06] text-xs font-semibold transition-colors"
             title="Log Out"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5" />
             <span>{isAr ? 'خروج' : isKu ? 'دەرچوون' : 'Log Out'}</span>
           </button>
         </div>
       </div>
 
       {/* KPI Stats Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="bg-[#170b0e] border border-[#34161c] rounded-2xl p-4">
-          <span className="text-xs text-gray-400 font-semibold uppercase">
-            {isKu ? 'کۆی گشتی خواردنەکان' : 'Total Items'}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-zinc-900/60 border border-white/[0.08] rounded-xl p-4">
+          <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">
+            {isKu ? 'کۆی خواردنەکان' : 'Total Items'}
           </span>
-          <p className="text-2xl font-black text-white mt-1">{items.length}</p>
+          <p className="text-2xl font-bold text-white mt-1 tabular-nums">{items.length}</p>
         </div>
-        <div className="bg-[#170b0e] border border-[#34161c] rounded-2xl p-4">
-          <span className="text-xs text-gray-400 font-semibold uppercase">
-            {isKu ? 'پۆلەکان (Categories)' : 'Categories'}
+        <div className="bg-zinc-900/60 border border-white/[0.08] rounded-xl p-4">
+          <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">
+            {isKu ? 'پۆلەکان' : 'Categories'}
           </span>
-          <p className="text-2xl font-black text-[#f5a623] mt-1">{categories.length - 1}</p>
+          <p className="text-2xl font-bold text-amber-400 mt-1 tabular-nums">{categories.length - 1}</p>
         </div>
-        <div className="bg-[#170b0e] border border-[#34161c] rounded-2xl p-4">
-          <span className="text-xs text-gray-400 font-semibold uppercase">
-            {isKu ? 'بەردەست لە کۆگا' : 'In Stock'}
+        <div className="bg-zinc-900/60 border border-white/[0.08] rounded-xl p-4">
+          <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">
+            {isKu ? 'بەردەست' : 'In Stock'}
           </span>
-          <p className="text-2xl font-black text-emerald-400 mt-1">
+          <p className="text-2xl font-bold text-emerald-400 mt-1 tabular-nums">
             {items.filter((i) => i.inStock !== false).length}
           </p>
         </div>
-        <div className="bg-[#170b0e] border border-[#34161c] rounded-2xl p-4">
-          <span className="text-xs text-gray-400 font-semibold uppercase">
-            {isKu ? 'تەواوبوو (Sold Out)' : 'Sold Out'}
+        <div className="bg-zinc-900/60 border border-white/[0.08] rounded-xl p-4">
+          <span className="text-[11px] text-zinc-400 font-medium uppercase tracking-wider">
+            {isKu ? 'تەواوبوو' : 'Sold Out'}
           </span>
-          <p className="text-2xl font-black text-red-400 mt-1">
+          <p className="text-2xl font-bold text-red-400 mt-1 tabular-nums">
             {items.filter((i) => i.inStock === false).length}
           </p>
         </div>
       </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#2d1419] pb-2">
+      {/* Segmented Navigation Tabs */}
+      <div className="flex items-center gap-1.5 border-b border-white/[0.08] pb-2">
         <button
           onClick={() => setAdminTab('items')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             adminTab === 'items'
-              ? 'bg-[#ba181b] text-white shadow-glow-red'
-              : 'text-gray-400 hover:text-white hover:bg-[#200f13]'
+              ? 'bg-zinc-800 text-white border border-white/[0.12] shadow-subtle'
+              : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
           }`}
         >
-          <Flame className="w-4 h-4" />
-          <span>{isKu ? 'بەڕێوەبردنی خواردنەکان' : 'Manage Items'} ({items.length})</span>
+          <Flame className="w-3.5 h-3.5" />
+          <span>{isKu ? 'خواردنەکان' : 'Dishes'} ({items.length})</span>
         </button>
 
         <button
           onClick={() => setAdminTab('categories')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             adminTab === 'categories'
-              ? 'bg-[#ba181b] text-white shadow-glow-red'
-              : 'text-gray-400 hover:text-white hover:bg-[#200f13]'
+              ? 'bg-zinc-800 text-white border border-white/[0.12] shadow-subtle'
+              : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
           }`}
         >
-          <Layers className="w-4 h-4" />
-          <span>{isKu ? 'پۆلەکان (Categories)' : 'Categories'}</span>
+          <Layers className="w-3.5 h-3.5" />
+          <span>{isKu ? 'پۆلەکان' : 'Categories'}</span>
         </button>
 
         <button
           onClick={() => setAdminTab('settings')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
             adminTab === 'settings'
-              ? 'bg-[#ba181b] text-white shadow-glow-red'
-              : 'text-gray-400 hover:text-white hover:bg-[#200f13]'
+              ? 'bg-zinc-800 text-white border border-white/[0.12] shadow-subtle'
+              : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
           }`}
         >
-          <Settings className="w-4 h-4" />
-          <span>{isKu ? 'ڕێکخستنەکان و باکئەپ' : 'Settings & Backup'}</span>
+          <Settings className="w-3.5 h-3.5" />
+          <span>{isKu ? 'ڕێکخستن و ئاسایش' : 'Settings & Security'}</span>
         </button>
       </div>
 
@@ -647,24 +636,24 @@ export const AdminPanel = () => {
         <div className="space-y-4">
           
           {/* Search & Filter Toolbar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-[#180b0e] border border-[#34161c] p-3 rounded-2xl">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-zinc-900/50 border border-white/[0.08] p-3 rounded-xl">
             <div className="relative w-full sm:w-72">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-400" />
               <input
                 type="text"
-                placeholder={isKu ? 'گەڕان لە خواردنەکان...' : 'Filter items by name...'}
+                placeholder={isKu ? 'گەڕان بەپێی ناو...' : 'Filter items by name...'}
                 value={adminSearch}
                 onChange={(e) => setAdminSearch(e.target.value)}
-                className="w-full bg-[#200f13] text-white text-xs pl-9 pr-3 py-2 rounded-xl border border-[#3d1a21] focus:outline-none focus:border-[#f5a623]"
+                className="w-full bg-zinc-950 text-white text-xs pl-8 pr-3 py-1.5 rounded-lg border border-white/[0.08] focus:outline-none focus:border-amber-500/50"
               />
             </div>
 
-            <div className="flex items-center gap-2 w-full sm:w-auto overflow-x-auto">
-              <Filter className="w-4 h-4 text-gray-500 flex-shrink-0" />
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <Filter className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
               <select
                 value={adminCategoryFilter}
                 onChange={(e) => setAdminCategoryFilter(e.target.value)}
-                className="bg-[#200f13] text-white text-xs border border-[#3d1a21] rounded-xl px-3 py-2 focus:outline-none focus:border-[#f5a623]"
+                className="bg-zinc-950 text-white text-xs border border-white/[0.08] rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-500/50"
               >
                 <option value="all">{isKu ? 'هەموو پۆلەکان' : 'All Categories'}</option>
                 {categories.filter(c => c.id !== 'all').map((c) => (
@@ -676,11 +665,11 @@ export const AdminPanel = () => {
             </div>
           </div>
 
-          {/* Items Table / Cards */}
-          <div className="bg-[#180b0e] border border-[#34161c] rounded-2xl overflow-hidden shadow-xl">
+          {/* Items Table */}
+          <div className="bg-zinc-900/60 border border-white/[0.08] rounded-xl overflow-hidden shadow-card">
             <div className="overflow-x-auto">
               <table className="w-full text-left rtl:text-right text-xs">
-                <thead className="bg-[#241014] text-gray-400 font-bold uppercase tracking-wider border-b border-[#3b1820]">
+                <thead className="bg-zinc-950 text-zinc-400 font-semibold uppercase tracking-wider border-b border-white/[0.06]">
                   <tr>
                     <th className="py-3 px-4">{isKu ? 'وێنە و ناو' : 'Item & Photo'}</th>
                     <th className="py-3 px-4">{isKu ? 'پۆل' : 'Category'}</th>
@@ -690,11 +679,11 @@ export const AdminPanel = () => {
                     <th className="py-3 px-4 text-right rtl:text-left">{isKu ? 'کردارەکان' : 'Actions'}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#2a1318]">
+                <tbody className="divide-y divide-white/[0.04]">
                   {filteredAdminItems.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-8 text-center text-gray-500 font-semibold">
-                        {isKu ? 'هیچ خواردنێک نەدۆزرایەوە!' : 'No items match your criteria.'}
+                      <td colSpan={6} className="py-8 text-center text-zinc-500">
+                        {isKu ? 'هیچ خواردنێک نەدۆزرایەوە' : 'No items match your criteria.'}
                       </td>
                     </tr>
                   ) : (
@@ -705,7 +694,7 @@ export const AdminPanel = () => {
                       return (
                         <tr
                           key={item.id}
-                          className="hover:bg-[#200f13] transition-colors"
+                          className="hover:bg-zinc-800/40 transition-colors"
                         >
                           {/* Image & Title */}
                           <td className="py-3 px-4">
@@ -713,14 +702,14 @@ export const AdminPanel = () => {
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-12 h-12 rounded-xl object-cover bg-[#2a1218] flex-shrink-0 border border-[#3d1820]"
+                                className="w-10 h-10 rounded-lg object-cover bg-zinc-950 flex-shrink-0 border border-white/10"
                               />
                               <div>
-                                <p className="font-bold text-white text-sm">
+                                <p className="font-semibold text-white text-xs sm:text-sm">
                                   {item.name}
                                 </p>
                                 {(isAr ? item.nameAr || item.nameKu : item.nameKu) && (
-                                  <p className="text-[11px] text-[#f5a623] font-kurdish">
+                                  <p className="text-[11px] text-zinc-400 font-normal">
                                     {isAr ? item.nameAr || item.nameKu : item.nameKu}
                                   </p>
                                 )}
@@ -730,24 +719,24 @@ export const AdminPanel = () => {
 
                           {/* Category */}
                           <td className="py-3 px-4">
-                            <span className="px-2.5 py-1 rounded-lg bg-[#271217] text-gray-300 font-semibold border border-[#3b1820]">
+                            <span className="px-2 py-0.5 rounded-md bg-zinc-800 text-zinc-300 font-medium text-[11px] border border-white/[0.05]">
                               {isAr ? catObj?.nameAr || catObj?.nameEn || item.category : isKu ? catObj?.nameKu || item.category : catObj?.nameEn || item.category}
                             </span>
                           </td>
 
                           {/* Price */}
-                          <td className="py-3 px-4 font-black text-[#f5a623] text-sm">
+                          <td className="py-3 px-4 font-bold text-white tabular-nums">
                             {formatPrice(item.price)}
                           </td>
 
                           {/* Tag */}
                           <td className="py-3 px-4">
                             {item.tag ? (
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#ba181b]/30 text-[#f5a623] border border-[#ba181b]">
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-zinc-800 text-amber-400 border border-amber-500/20">
                                 {item.tag}
                               </span>
                             ) : (
-                              <span className="text-gray-600">—</span>
+                              <span className="text-zinc-600">—</span>
                             )}
                           </td>
 
@@ -755,10 +744,10 @@ export const AdminPanel = () => {
                           <td className="py-3 px-4">
                             <button
                               onClick={() => toggleStock(item.id)}
-                              className={`px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors ${
+                              className={`px-2.5 py-1 rounded-md text-[11px] font-medium border transition-colors ${
                                 !isOutOfStock
-                                  ? 'bg-emerald-950/60 text-emerald-400 border-emerald-500/50 hover:bg-emerald-900/60'
-                                  : 'bg-red-950/60 text-red-400 border-red-500/50 hover:bg-red-900/60'
+                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
+                                  : 'bg-red-500/10 text-red-400 border-red-500/30 hover:bg-red-500/20'
                               }`}
                             >
                               {!isOutOfStock ? (isKu ? 'بەردەستە' : 'In Stock') : (isKu ? 'تەواوبووە' : 'Sold Out')}
@@ -770,14 +759,14 @@ export const AdminPanel = () => {
                             <div className="flex items-center justify-end rtl:justify-start gap-1.5">
                               <button
                                 onClick={() => handleOpenEdit(item)}
-                                className="p-2 rounded-lg bg-[#2b1319] hover:bg-[#3d1b23] text-blue-400 hover:text-white transition-colors"
+                                className="p-1.5 rounded-md bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white transition-colors"
                                 title="Edit Item"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => setItemToDelete(item)}
-                                className="p-2 rounded-lg bg-[#2b1319] hover:bg-red-950/80 text-red-400 hover:text-red-200 transition-colors"
+                                className="p-1.5 rounded-md bg-zinc-800 hover:bg-red-950/60 text-zinc-400 hover:text-red-300 transition-colors"
                                 title="Delete Item"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -799,15 +788,15 @@ export const AdminPanel = () => {
       {adminTab === 'categories' && (
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Add Category Form */}
-          <div className="md:col-span-5 bg-[#180b0e] border border-[#34161c] rounded-2xl p-5 space-y-4">
-            <h3 className="text-base font-black text-white flex items-center gap-2">
-              <Plus className="w-4 h-4 text-[#f5a623]" />
+          <div className="md:col-span-5 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+              <Plus className="w-4 h-4 text-amber-400" />
               <span>{isKu ? 'زیادکردنی پۆلی نوێ' : 'Add New Category'}</span>
             </h3>
 
             <form onSubmit={handleAddCategorySubmit} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Category Name (English):
                 </label>
                 <input
@@ -815,13 +804,13 @@ export const AdminPanel = () => {
                   placeholder="e.g. Desserts, Sandwiches..."
                   value={newCatNameEn}
                   onChange={(e) => setNewCatNameEn(e.target.value)}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                   ناوی پۆل (کوردی):
                 </label>
                 <input
@@ -829,12 +818,12 @@ export const AdminPanel = () => {
                   placeholder="بۆ نموونە: شیرینی، لەفاف..."
                   value={newCatNameKu}
                   onChange={(e) => setNewCatNameKu(e.target.value)}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                   اسم القسم (العربية):
                 </label>
                 <input
@@ -842,18 +831,18 @@ export const AdminPanel = () => {
                   placeholder="مثال: حلويات، ساندويتشات..."
                   value={newCatNameAr}
                   onChange={(e) => setNewCatNameAr(e.target.value)}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Category Icon:
                 </label>
                 <select
                   value={newCatIcon}
                   onChange={(e) => setNewCatIcon(e.target.value)}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 >
                   <option value="Flame">Flame (ئاگر)</option>
                   <option value="Drumstick">Drumstick (ڕانی مریشک)</option>
@@ -867,16 +856,16 @@ export const AdminPanel = () => {
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#ba181b] to-[#990012] hover:from-[#c4151c] hover:to-[#ba181b] text-white font-bold text-xs shadow-md transition-all active:scale-98"
+                className="w-full py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 font-bold text-xs transition-all active:scale-98"
               >
-                {isKu ? 'پاشەکەوتکردنی پۆل' : 'Save Category'}
+                {isKu ? 'پاشەکەوتکردن' : 'Save Category'}
               </button>
             </form>
           </div>
 
           {/* Existing Categories List */}
-          <div className="md:col-span-7 bg-[#180b0e] border border-[#34161c] rounded-2xl p-5 space-y-3">
-            <h3 className="text-base font-black text-white">
+          <div className="md:col-span-7 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-3">
+            <h3 className="text-sm font-bold text-white">
               {isKu ? 'پۆلە بەردەستەکان' : 'Active Categories'}
             </h3>
 
@@ -886,16 +875,16 @@ export const AdminPanel = () => {
                 return (
                   <div
                     key={c.id}
-                    className="flex items-center justify-between p-3 rounded-xl bg-[#200f13] border border-[#3b1920]"
+                    className="flex items-center justify-between p-3 rounded-lg bg-zinc-950 border border-white/[0.06]"
                   >
                     <div>
-                      <p className="font-bold text-white text-xs sm:text-sm">
+                      <p className="font-semibold text-white text-xs sm:text-sm">
                         {c.nameEn}
-                        <span className="text-xs text-[#f5a623] ml-2 font-kurdish">
+                        <span className="text-xs text-amber-400 ml-2 font-normal">
                           ({c.nameKu})
                         </span>
                       </p>
-                      <p className="text-[10px] text-gray-500 mt-0.5">
+                      <p className="text-[10px] text-zinc-500 mt-0.5">
                         ID: {c.id} • {count} {isKu ? 'خواردن' : 'items'}
                       </p>
                     </div>
@@ -903,7 +892,7 @@ export const AdminPanel = () => {
                     {c.id !== 'all' && (
                       <button
                         onClick={() => deleteCategory(c.id)}
-                        className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-950/40 transition-colors"
+                        className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-900 transition-colors"
                         title="Delete Category"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -922,63 +911,63 @@ export const AdminPanel = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           
           {/* Restaurant Details Form */}
-          <div className="md:col-span-7 bg-[#180b0e] border border-[#34161c] rounded-2xl p-6 space-y-4">
-            <h3 className="text-base font-black text-white">
+          <div className="md:col-span-7 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <h3 className="text-sm font-bold text-white">
               {isKu ? 'زانیارییەکانی ڕێستۆرانت' : 'Restaurant & Order Information'}
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Restaurant Name (EN):
                 </label>
                 <input
                   type="text"
                   value={restaurantInfo.name}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, name: e.target.value })}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                   ناوی ڕێستۆرانت (کوردی):
                 </label>
                 <input
                   type="text"
                   value={restaurantInfo.nameKu}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameKu: e.target.value })}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                   اسم المطعم (العربية):
                 </label>
                 <input
                   type="text"
                   value={restaurantInfo.nameAr || ''}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameAr: e.target.value })}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
-                  WhatsApp Number (with country code):
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
+                  WhatsApp Number:
                 </label>
                 <input
                   type="text"
                   value={restaurantInfo.whatsapp}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, whatsapp: e.target.value })}
                   placeholder="9647506008620"
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Phone Display:
                 </label>
                 <input
@@ -986,12 +975,12 @@ export const AdminPanel = () => {
                   dir="ltr"
                   value={restaurantInfo.phone}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, phone: e.target.value })}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Currency Symbol:
                 </label>
                 <input
@@ -999,19 +988,19 @@ export const AdminPanel = () => {
                   value={restaurantInfo.currency}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, currency: e.target.value })}
                   placeholder="IQD or $"
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   Hawler Address:
                 </label>
                 <input
                   type="text"
                   value={restaurantInfo.address}
                   onChange={(e) => setRestaurantInfo({ ...restaurantInfo, address: e.target.value })}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
             </div>
@@ -1019,33 +1008,33 @@ export const AdminPanel = () => {
             <button
               onClick={() => {
                 updateRestaurantInfo(restaurantInfo);
-                showToast(isAr ? 'تم حفظ معلومات المطعم في قاعدة البيانات!' : isKu ? 'زانیارییەکان لە داتابەیس پاشەکەوتکران!' : 'Restaurant info saved to database!');
+                showToast(isAr ? 'تم حفظ التعديلات!' : isKu ? 'گۆڕانکارییەکان پاشەکەوتکران' : 'Settings saved to database!');
               }}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-bold text-xs"
+              className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs"
             >
-              {isKu ? 'پاشەکەوتکردنی گۆڕانکارییەکان' : 'Save Details'}
+              {isKu ? 'پاشەکەوتکردن' : 'Save Details'}
             </button>
           </div>
 
-          {/* Backup, Export & Reset */}
-          <div className="md:col-span-5 bg-[#180b0e] border border-[#34161c] rounded-2xl p-6 space-y-4">
-            <h3 className="text-base font-black text-white">
-              {isKu ? 'پاراستن و هەناردەکردنی داتا' : 'Data Backup & Reset'}
+          {/* Backup & Export */}
+          <div className="md:col-span-5 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <h3 className="text-sm font-bold text-white">
+              {isKu ? 'پاراستن و باکئەپی داتا' : 'Data Backup & Reset'}
             </h3>
 
             <div className="space-y-3">
               <button
                 onClick={exportData}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#230f14] hover:bg-[#34161c] text-white border border-[#441a24] text-xs font-bold transition-all"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-white/[0.08] text-xs font-semibold transition-all"
               >
-                <Download className="w-4 h-4 text-[#f5a623]" />
-                <span>{isKu ? 'داگرتنی باکئەپی مێنیو (JSON)' : 'Export Backup File (JSON)'}</span>
+                <Download className="w-3.5 h-3.5 text-amber-400" />
+                <span>{isKu ? 'داگرتنی باکئەپ (JSON)' : 'Export Backup File (JSON)'}</span>
               </button>
 
               <div>
-                <label className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-[#230f14] hover:bg-[#34161c] text-white border border-[#441a24] text-xs font-bold cursor-pointer transition-all">
-                  <UploadCloud className="w-4 h-4 text-emerald-400" />
-                  <span>{isKu ? 'هاوردەکردنی باکئەپ (Import JSON)' : 'Import Menu Backup'}</span>
+                <label className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-white/[0.08] text-xs font-semibold cursor-pointer transition-all">
+                  <UploadCloud className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>{isKu ? 'هاوردەکردنی باکئەپ' : 'Import Menu Backup'}</span>
                   <input
                     type="file"
                     accept=".json"
@@ -1056,7 +1045,7 @@ export const AdminPanel = () => {
                       const reader = new FileReader();
                       reader.onload = (event) => {
                         const ok = importData(event.target.result);
-                        if (ok) showToast(isKu ? 'داتاکە بە سەرکەوتوویی هاوردەکرا!' : 'Menu data restored!');
+                        if (ok) showToast(isKu ? 'داتاکە هاوردەکرا!' : 'Menu data restored!');
                       };
                       reader.readAsText(file);
                     }}
@@ -1064,55 +1053,55 @@ export const AdminPanel = () => {
                 </label>
               </div>
 
-              <div className="pt-4 border-t border-[#311318]">
+              <div className="pt-3 border-t border-white/[0.06]">
                 <button
                   onClick={() => {
                     if (window.confirm(isKu ? 'دڵنیایت لە گەڕانەوە بۆ مێنیوی سەرەتایی چیکۆرا؟' : 'Are you sure you want to restore default items?')) {
                       resetToDefaults();
-                      showToast(isKu ? 'مێنیو گەڕایەوە بۆ باری سەرەتایی' : 'Restored to default Chikora menu!');
+                      showToast(isKu ? 'مێنیو گەڕایەوە باری سەرەتایی' : 'Restored to default Chikora menu!');
                     }
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-800/40 text-xs font-bold transition-all"
+                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-red-950/60 text-zinc-400 hover:text-red-300 border border-white/[0.08] text-xs font-semibold transition-all"
                 >
-                  <RefreshCw className="w-4 h-4" />
-                  <span>{isKu ? 'گەڕانەوە بۆ مێنیوی سەرەتایی (Reset Defaults)' : 'Reset To Original Factory Menu'}</span>
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>{isKu ? 'گەڕانەوە بۆ باری سەرەتایی' : 'Reset To Original Factory Menu'}</span>
                 </button>
               </div>
             </div>
           </div>
 
           {/* Admin Security & Password Change */}
-          <div className="md:col-span-12 bg-[#180b0e] border border-[#3b1820] rounded-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-[#311318] pb-3">
+          <div className="md:col-span-12 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-[#f5a623]" />
-                <h3 className="text-base font-black text-white">
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <h3 className="text-sm font-bold text-white">
                   {isAr ? 'أمان الحساب وتغيير كلمة المرور' : isKu ? 'ئاسایشی ئەکاونت و گۆڕینی وشەی نهێنی' : 'Account Security & Password Management'}
                 </h3>
               </div>
-              <span className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-full font-bold">
+              <span className="text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">
                 ✓ {isKu ? 'پارێزراوە لە هاک' : 'Protected'}
               </span>
             </div>
 
             {securityMessage.text && (
-              <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+              <div className={`p-3 rounded-lg border text-xs flex items-center gap-2 ${
                 securityMessage.type === 'success'
-                  ? 'bg-emerald-950/60 border-emerald-800/60 text-emerald-300'
-                  : 'bg-red-950/60 border-red-800/60 text-red-300'
+                  ? 'bg-emerald-950/60 border-emerald-800/40 text-emerald-300'
+                  : 'bg-red-950/60 border-red-800/40 text-red-300'
               }`}>
                 {securityMessage.type === 'success' ? (
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
                 ) : (
-                  <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                  <AlertCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
                 )}
                 <span>{securityMessage.text}</span>
               </div>
             )}
 
-            <form onSubmit={handleChangePasswordSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <form onSubmit={handleChangePasswordSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
                   {isAr ? 'كلمة المرور الحالية:' : isKu ? 'وشەی نهێنی ئێستا:' : 'Current Password:'}
                 </label>
                 <input
@@ -1120,46 +1109,46 @@ export const AdminPanel = () => {
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
-                  {isAr ? 'اسم المستخدم الجديد:' : isKu ? 'ناوی نوێی بەکارهێنەر:' : 'New Username (Optional):'}
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
+                  {isAr ? 'اسم المستخدم الجديد:' : isKu ? 'ناوی نوێ:' : 'New Username (Optional):'}
                 </label>
                 <input
                   type="text"
                   value={newAdminUsername}
                   onChange={(e) => setNewAdminUsername(e.target.value)}
                   placeholder={adminUser?.username || 'admin'}
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
-                  {isAr ? 'كلمة المرور الجديدة (6 أحرف+):' : isKu ? 'وشەی نهێنی نوێ (٦ پیت+):' : 'New Password (6+ chars):'}
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
+                  {isAr ? 'كلمة المرور الجديدة (6+):' : isKu ? 'وشەی نهێنی نوێ (٦+):' : 'New Password (6+ chars):'}
                 </label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-300 mb-1">
-                  {isAr ? 'تأكيد كلمة المرور الجديدة:' : isKu ? 'دووبارەکردنەوەی وشەی نهێنی نوێ:' : 'Confirm New Password:'}
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
+                  {isAr ? 'تأكيد كلمة المرور:' : isKu ? 'دووبارەکردنەوە:' : 'Confirm New Password:'}
                 </label>
                 <input
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 />
               </div>
 
@@ -1167,17 +1156,17 @@ export const AdminPanel = () => {
                 <button
                   type="submit"
                   disabled={securityLoading}
-                  className="py-2.5 px-6 rounded-xl bg-gradient-to-r from-[#ba181b] via-[#c2410c] to-[#f5a623] hover:brightness-110 text-white font-bold text-xs shadow-glow-red disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                  className="py-2 px-4 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs border border-white/[0.1] disabled:opacity-50 transition-all flex items-center justify-center gap-1.5"
                 >
                   {securityLoading ? (
                     <>
-                      <RefreshCw className="w-4 h-4 animate-spin" />
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
                       <span>{isKu ? 'نوێکردنەوە...' : 'Updating...'}</span>
                     </>
                   ) : (
                     <>
-                      <ShieldCheck className="w-4 h-4" />
-                      <span>{isAr ? 'تحديث كلمة المرور والحساب' : isKu ? 'نوێکردنەوەی وشەی نهێنی و ئەکاونت' : 'Update Admin Credentials'}</span>
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                      <span>{isAr ? 'تحديث بيانات الحساب' : isKu ? 'نوێکردنەوەی ئەکاونت' : 'Update Credentials'}</span>
                     </>
                   )}
                 </button>
@@ -1189,51 +1178,51 @@ export const AdminPanel = () => {
 
       {/* MODAL: ADD / EDIT MENU ITEM */}
       {isItemModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto">
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-2xl bg-[#180b0e] border border-[#3d1920] rounded-3xl overflow-hidden shadow-2xl flex flex-col my-8"
+            className="w-full max-w-xl bg-zinc-900 border border-white/[0.1] rounded-2xl overflow-hidden shadow-dialog flex flex-col my-8"
           >
             {/* Modal Header */}
-            <div className="p-5 border-b border-[#311318] flex items-center justify-between bg-[#220e13]">
-              <div className="flex items-center gap-2">
-                <div className="p-2 rounded-xl bg-[#ba181b]/30 text-[#f5a623] border border-[#ba181b]/60">
-                  {editingItem ? <Edit2 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+            <div className="p-4 border-b border-white/[0.08] flex items-center justify-between bg-zinc-950">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded-lg bg-zinc-800 text-amber-400 border border-white/10">
+                  {editingItem ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                 </div>
                 <div>
-                  <h3 className="text-lg font-black text-white">
+                  <h3 className="text-base font-bold text-white tracking-tight">
                     {editingItem
-                      ? (isKu ? 'دەستکاریکردنی خواردن' : 'Edit Menu Dish')
-                      : (isKu ? 'زیادکردنی خواردنی نوێ بۆ چیکۆرا' : 'Upload New Chikora Dish')}
+                      ? (isKu ? 'دەستکاریکردنی خواردن' : 'Edit Menu Item')
+                      : (isKu ? 'زیادکردنی خواردنی نوێ' : 'Add Menu Item')}
                   </h3>
-                  <span className="text-xs text-gray-400">
-                    {isKu ? 'ناوەڕۆک، وێنە و نرخ دیاریبکە' : 'Provide food title, photo upload, category and pricing'}
+                  <span className="text-[11px] text-zinc-400">
+                    {isKu ? 'ناوەڕۆک، وێنە و نرخ دیاریبکە' : 'Item details, photo, category, and pricing'}
                   </span>
                 </div>
               </div>
 
               <button
                 onClick={() => setIsItemModalOpen(false)}
-                className="p-1.5 rounded-lg bg-[#2c1318] hover:bg-[#3d1a21] text-gray-300 hover:text-white"
+                className="p-1 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSaveItem} className="p-6 space-y-5 overflow-y-auto max-h-[75vh]">
+            <form onSubmit={handleSaveItem} className="p-5 space-y-4 overflow-y-auto max-h-[75vh]">
               {formError && (
-                <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/80 border border-red-600/50 text-red-300 text-xs font-semibold">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-red-950/80 border border-red-800/40 text-red-300 text-xs font-medium">
+                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>{formError}</span>
                 </div>
               )}
 
               {/* Names */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1">
-                    {isAr ? 'اسم الوجبة (الإنجليزية) *' : isKu ? 'ناوی خواردن (ئینگلیزی) *' : 'Dish Name (English) *'}
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
+                    {isAr ? 'اسم الوجبة (EN) *' : isKu ? 'ناو (ئینگلیزی) *' : 'Name (English) *'}
                   </label>
                   <input
                     type="text"
@@ -1241,47 +1230,47 @@ export const AdminPanel = () => {
                     placeholder="e.g. Crispy Tenders 8 Pcs"
                     value={formName}
                     onChange={(e) => setFormName(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
-                    {isAr ? 'اسم الوجبة (الكردية):' : isKu ? 'ناوی خواردن (کوردی):' : 'Dish Name (Kurdish):'}
+                  <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                    {isAr ? 'اسم الوجبة (كردي):' : isKu ? 'ناو (کوردی):' : 'Name (Kurdish):'}
                   </label>
                   <input
                     type="text"
-                    placeholder="بۆ نموونە: تەندەرزی کریسپی ٨ پارچە"
+                    placeholder="بۆ نموونە: تەندەرزی کریسپی"
                     value={formNameKu}
                     onChange={(e) => setFormNameKu(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
-                    {isAr ? 'اسم الوجبة (العربية):' : isKu ? 'ناوی خواردن (عەرەبی):' : 'Dish Name (Arabic):'}
+                  <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                    {isAr ? 'اسم الوجبة (عربي):' : isKu ? 'ناو (عەرەبی):' : 'Name (Arabic):'}
                   </label>
                   <input
                     type="text"
-                    placeholder="مثال: تندرز الدجاج المقرمش 8 قطع"
+                    placeholder="مثال: تندرز الدجاج المقرمش"
                     value={formNameAr}
                     onChange={(e) => setFormNameAr(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
               </div>
 
               {/* Category, Price, Badge */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1">
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
                     {isAr ? 'القسم *' : isKu ? 'پۆل *' : 'Category *'}
                   </label>
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   >
                     {categories.filter(c => c.id !== 'all').map((c) => (
                       <option key={c.id} value={c.id}>
@@ -1292,7 +1281,7 @@ export const AdminPanel = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1">
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
                     {isAr ? `السعر (${restaurantInfo.currency}) *` : isKu ? `نرخ (${restaurantInfo.currency}) *` : `Price (${restaurantInfo.currency}) *`}
                   </label>
                   <input
@@ -1304,54 +1293,50 @@ export const AdminPanel = () => {
                     placeholder="e.g. 7500"
                     value={formPrice}
                     onChange={(e) => setFormPrice(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1">
-                    {isAr ? 'العلامة المميزة:' : isKu ? 'تایبەتمەندی (Badge):' : 'Badge / Tag:'}
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
+                    {isAr ? 'العلامة:' : isKu ? 'تایبەتمەندی:' : 'Badge / Tag:'}
                   </label>
                   <select
                     value={formTag}
                     onChange={(e) => setFormTag(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   >
-                    <option value="">{isAr ? 'بدون (عادي)' : isKu ? 'None (ئاسایی)' : 'None'}</option>
-                    <option value="Best Seller">⭐ {isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Seller'}</option>
-                    <option value="Spicy">🌶️ {isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}</option>
-                    <option value="Chef Special">👑 {isAr ? 'توقيع الشيف' : isKu ? 'تایبەتی شێف' : 'Chef Special'}</option>
-                    <option value="New">🔥 {isAr ? 'جديد' : isKu ? 'نوێ' : 'New'}</option>
+                    <option value="">None</option>
+                    <option value="Best Seller">⭐ Best Seller</option>
+                    <option value="Spicy">🌶️ Spicy</option>
+                    <option value="Chef Special">👑 Chef Special</option>
+                    <option value="New">🔥 New</option>
                   </select>
                 </div>
               </div>
 
               {/* IMAGE UPLOAD SECTION */}
-              <div className="bg-[#200f13] border border-[#3b1820] rounded-2xl p-4 space-y-3">
-                <label className="text-xs font-bold text-gray-300 flex items-center gap-1.5">
-                  <ImageIcon className="w-4 h-4 text-[#f5a623]" />
-                  <span>{isAr ? 'صورة الوجبة (تحميل ملف)' : isKu ? 'وێنەی خواردن (بارکردنی فایل)' : 'Food Image Upload'}</span>
+              <div className="bg-zinc-950/60 border border-white/[0.06] rounded-xl p-3.5 space-y-2.5">
+                <label className="text-xs font-medium text-zinc-300 flex items-center gap-1.5">
+                  <ImageIcon className="w-3.5 h-3.5 text-amber-400" />
+                  <span>{isAr ? 'صورة الوجبة' : isKu ? 'وێنەی خواردن' : 'Food Image Upload'}</span>
                 </label>
 
                 {/* File Upload Box */}
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-[#4a1f28] hover:border-[#f5a623] rounded-2xl p-5 text-center cursor-pointer transition-colors bg-[#180b0e] group"
+                  className="border border-dashed border-white/15 hover:border-amber-500/50 rounded-xl p-4 text-center cursor-pointer transition-colors bg-zinc-950 group"
                 >
-                  <Upload className="w-8 h-8 mx-auto text-[#f5a623] mb-2 group-hover:scale-110 transition-transform" />
-                  <p className="text-xs font-bold text-gray-200">
+                  <Upload className="w-6 h-6 mx-auto text-zinc-400 group-hover:text-amber-400 mb-1.5 group-hover:scale-105 transition-all" />
+                  <p className="text-xs font-semibold text-zinc-200">
                     {isAr
-                      ? 'اضغط هنا لاختيار صورة من جهازك'
+                      ? 'اختر صورة من جهازك'
                       : isKu
-                      ? 'کرتە بکە بۆ هەڵبژاردنی وێنە لە کۆمپیوتەرەکەت'
-                      : 'Click to browse and upload photo from device'}
+                      ? 'کرتە بکە بۆ هەڵبژاردنی وێنە'
+                      : 'Click to upload image from device'}
                   </p>
-                  <p className="text-[10px] text-gray-400 mt-1">
-                    {isAr
-                      ? 'يدعم جميع أحجام الصور (يتم ضغطها وتجهيزها تلقائياً)'
-                      : isKu
-                      ? 'هەموو وێنەیەک دەبێت (PNG, JPG, WEBP) - خۆکارانە ڕێکدەخرێت'
-                      : 'Supports PNG, JPG, WEBP (automatically optimized)'}
+                  <p className="text-[10px] text-zinc-500 mt-0.5">
+                    Supports PNG, JPG, WEBP (auto-optimized)
                   </p>
                   <input
                     ref={fileInputRef}
@@ -1364,46 +1349,46 @@ export const AdminPanel = () => {
 
                 {/* Current Preview */}
                 {formImage && (
-                  <div className="flex items-center justify-between pt-2 border-t border-[#311318]">
-                    <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between pt-2 border-t border-white/[0.06]">
+                    <div className="flex items-center gap-2.5">
                       <img
                         src={formImage}
                         alt="Preview"
-                        className="w-14 h-14 rounded-xl object-cover border border-[#f5a623]"
+                        className="w-10 h-10 rounded-lg object-cover border border-white/10"
                       />
-                      <div className="text-[11px] text-gray-400">
-                        <span className="text-emerald-400 font-bold">✓ {isAr ? 'تم اختيار الصورة' : isKu ? 'وێنە دیاریکراوە' : 'Image ready'}</span>
-                        <p className="truncate max-w-xs">{formImage.slice(0, 40)}...</p>
+                      <div className="text-[11px] text-zinc-400">
+                        <span className="text-emerald-400 font-medium">✓ Image ready</span>
+                        <p className="truncate max-w-xs">{formImage.slice(0, 30)}...</p>
                       </div>
                     </div>
                     <button
                       type="button"
                       onClick={() => setFormImage('')}
-                      className="px-2.5 py-1 text-xs rounded-lg bg-red-950/60 hover:bg-red-900/80 text-red-300 border border-red-800/40 transition-colors"
+                      className="px-2 py-0.5 text-[11px] rounded-md bg-zinc-800 hover:bg-red-950/60 text-zinc-400 hover:text-red-300 transition-colors"
                     >
-                      {isAr ? 'حذف الصورة' : isKu ? 'سڕینەوە' : 'Remove'}
+                      Remove
                     </button>
                   </div>
                 )}
               </div>
 
               {/* Descriptions */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1">
-                    {isAr ? 'الوصف (الإنجليزية):' : isKu ? 'وەسف (ئینگلیزی):' : 'Description (English):'}
+                  <label className="block text-xs font-medium text-zinc-300 mb-1">
+                    {isAr ? 'الوصف (EN):' : isKu ? 'وەسف (ئینگلیزی):' : 'Description (English):'}
                   </label>
                   <textarea
                     rows={2}
-                    placeholder="Crunchy chicken breast, cheddar, pickles..."
+                    placeholder="Crispy chicken, signature sauce..."
                     value={formDescription}
                     onChange={(e) => setFormDescription(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                  <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                     وەسف (کوردی):
                   </label>
                   <textarea
@@ -1411,20 +1396,20 @@ export const AdminPanel = () => {
                     placeholder="سنگی مریشکی کریسپی بە پەنیر و سۆس..."
                     value={formDescriptionKu}
                     onChange={(e) => setFormDescriptionKu(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-300 mb-1 font-kurdish">
+                  <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
                     الوصف (العربية):
                   </label>
                   <textarea
                     rows={2}
-                    placeholder="صدر دجاج مقرمش مع جبنة شيدر ومخلل..."
+                    placeholder="صدر دجاج مقرمش مع صلصة خاصة..."
                     value={formDescriptionAr}
                     onChange={(e) => setFormDescriptionAr(e.target.value)}
-                    className="w-full bg-[#200f13] border border-[#3d1a21] rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#f5a623]"
+                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                   />
                 </div>
               </div>
@@ -1436,9 +1421,9 @@ export const AdminPanel = () => {
                     type="checkbox"
                     checked={formIsSpicy}
                     onChange={(e) => setFormIsSpicy(e.target.checked)}
-                    className="w-4 h-4 rounded text-[#ba181b] bg-[#200f13] border-[#3d1a21]"
+                    className="w-3.5 h-3.5 rounded text-red-500 bg-zinc-950 border-zinc-700"
                   />
-                  <span className="text-xs font-bold text-gray-300">
+                  <span className="text-xs font-medium text-zinc-300">
                     🌶️ {isKu ? 'خواردنی تیژە (Spicy)' : 'Spicy Item'}
                   </span>
                 </label>
@@ -1448,28 +1433,28 @@ export const AdminPanel = () => {
                     type="checkbox"
                     checked={formInStock}
                     onChange={(e) => setFormInStock(e.target.checked)}
-                    className="w-4 h-4 rounded text-emerald-500 bg-[#200f13] border-[#3d1a21]"
+                    className="w-3.5 h-3.5 rounded text-emerald-500 bg-zinc-950 border-zinc-700"
                   />
-                  <span className="text-xs font-bold text-gray-300">
-                    ✓ {isKu ? 'بەردەستە لە چێشتخانە' : 'In Stock & Available'}
+                  <span className="text-xs font-medium text-zinc-300">
+                    ✓ {isKu ? 'بەردەستە (In Stock)' : 'In Stock'}
                   </span>
                 </label>
               </div>
 
               {/* Actions */}
-              <div className="pt-4 border-t border-[#311318] flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-white/[0.08] flex items-center justify-end gap-2.5">
                 <button
                   type="button"
                   onClick={() => setIsItemModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl bg-[#251015] hover:bg-[#34161c] text-gray-300 text-xs font-bold"
+                  className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold"
                 >
                   {isKu ? 'پاشگەزبوونەوە' : 'Cancel'}
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#ba181b] to-[#990012] hover:from-[#c4151c] hover:to-[#ba181b] text-white text-xs font-black shadow-glow-red transition-all"
+                  className="px-5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-bold transition-all"
                 >
-                  {editingItem ? (isKu ? 'نوێکردنەوەی خواردن' : 'Update Dish') : (isKu ? 'زیادکردنی خواردن' : 'Upload Item')}
+                  {editingItem ? (isKu ? 'نوێکردنەوە' : 'Update') : (isKu ? 'زیادکردن' : 'Add Item')}
                 </button>
               </div>
             </form>
@@ -1479,21 +1464,21 @@ export const AdminPanel = () => {
 
       {/* CONFIRM DELETE MODAL */}
       {itemToDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm bg-[#1a0b0e] border border-red-900/50 rounded-2xl p-6 text-center space-y-4">
-            <div className="w-12 h-12 mx-auto rounded-full bg-red-950 flex items-center justify-center text-red-400">
-              <Trash2 className="w-6 h-6" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-sm bg-zinc-900 border border-white/[0.1] rounded-xl p-5 text-center space-y-3">
+            <div className="w-10 h-10 mx-auto rounded-full bg-red-950/80 border border-red-800/40 flex items-center justify-center text-red-400">
+              <Trash2 className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-bold text-white">
+            <h4 className="text-sm font-bold text-white">
               {isKu ? 'دڵنیایت لە سڕینەوەی ئەم خواردنە؟' : 'Delete this item?'}
             </h4>
-            <p className="text-xs text-gray-400">
-              "{itemToDelete.name}" {isKu ? 'بەتەواوی لە مێنیو دەسڕدرێتەوە.' : 'will be removed from the active menu.'}
+            <p className="text-xs text-zinc-400">
+              "{itemToDelete.name}" {isKu ? 'لە مێنیو دەسڕدرێتەوە.' : 'will be removed from the menu.'}
             </p>
-            <div className="flex items-center justify-center gap-3 pt-2">
+            <div className="flex items-center justify-center gap-2 pt-2">
               <button
                 onClick={() => setItemToDelete(null)}
-                className="px-4 py-2 rounded-xl bg-[#2a1318] text-gray-300 text-xs font-bold"
+                className="px-3.5 py-1.5 rounded-lg bg-zinc-800 text-zinc-300 text-xs font-semibold hover:bg-zinc-700"
               >
                 {isKu ? 'نەخێر' : 'Cancel'}
               </button>
@@ -1501,11 +1486,11 @@ export const AdminPanel = () => {
                 onClick={() => {
                   deleteItem(itemToDelete.id);
                   setItemToDelete(null);
-                  showToast(isKu ? 'خواردنەکە سڕدرایەوە!' : 'Item deleted!');
+                  showToast(isKu ? 'خواردنەکە سڕدرایەوە' : 'Item deleted');
                 }}
-                className="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-black"
+                className="px-3.5 py-1.5 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-bold"
               >
-                {isKu ? 'بەڵێ، بسڕەوە' : 'Yes, Delete'}
+                {isKu ? 'بەڵێ، بسڕەوە' : 'Delete'}
               </button>
             </div>
           </div>

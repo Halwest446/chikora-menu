@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { ArrowRight, ArrowLeft, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Check } from 'lucide-react';
 
 // Custom Crisp Flags
 const KurdistanFlag = ({ className = "w-7 h-5" }) => (
@@ -62,30 +62,28 @@ export const LanguageGate = ({ onEnter }) => {
 
   const isKu = lang === 'ku';
   const isAr = lang === 'ar';
-  const isEn = lang === 'en';
 
   const languages = [
     {
       code: 'ku',
       name: 'کوردی',
       subtitle: 'Kurdî',
-      flag: <KurdistanFlag className="w-8 h-5 rounded shadow-sm object-cover" />,
+      flag: <KurdistanFlag className="w-7 h-4.5 rounded shadow-sm object-cover" />,
     },
     {
       code: 'ar',
       name: 'العربية',
       subtitle: 'Arabic',
-      flag: <IraqFlag className="w-8 h-5 rounded shadow-sm object-cover" />,
+      flag: <IraqFlag className="w-7 h-4.5 rounded shadow-sm object-cover" />,
     },
     {
       code: 'en',
       name: 'English',
       subtitle: 'English',
-      flag: <UKFlag className="w-8 h-5 rounded shadow-sm object-cover" />,
+      flag: <UKFlag className="w-7 h-4.5 rounded shadow-sm object-cover" />,
     },
   ];
 
-  // Button text based on selected language
   const getButtonText = () => {
     if (isAr) return 'عرض القائمة';
     if (isKu) return 'بینینی مێنیو';
@@ -95,12 +93,12 @@ export const LanguageGate = ({ onEnter }) => {
   const getSubTitle = () => {
     if (isAr) return 'اختر لغتك المفضلة لتصفح قائمة الطعام';
     if (isKu) return 'تکایە زمانەکەت هەڵبژێرە بۆ بینینی مێنیوی خواردنەکان';
-    return 'Choose your preferred language to explore our menu';
+    return 'Select your preferred language to explore the menu';
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-hidden select-none">
-      {/* Background Video from IMG_6556.MOV */}
+      {/* Background Video */}
       <div className="absolute inset-0 overflow-hidden">
         <video
           autoPlay
@@ -108,46 +106,44 @@ export const LanguageGate = ({ onEnter }) => {
           muted
           playsInline
           poster="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=1920&q=80"
-          className="w-full h-full object-cover scale-105 transition-transform duration-1000"
+          className="w-full h-full object-cover scale-105"
         >
           <source src="/chikora-bg.mp4" type="video/mp4" />
         </video>
       </div>
       
-      {/* Ambient Gradient Overlays for readability and warm mood */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0406]/75 via-[#120609]/70 to-[#0a0406]/90 backdrop-blur-[2px]" />
-      <div className="absolute top-1/4 -left-20 w-72 h-72 bg-[#ba181b]/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-72 h-72 bg-[#f5a623]/20 rounded-full blur-3xl pointer-events-none" />
+      {/* Dark frosted vignette overlays */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[3px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/70" />
 
-      {/* Main Content Card matching Reference Layout */}
-      <div className="relative z-10 w-full max-w-md mx-auto flex flex-col items-center text-center space-y-7 animate-fade-in">
+      {/* Main Glassmorphic Container matching Reference Image */}
+      <div className="relative z-10 w-full max-w-sm sm:max-w-md mx-auto flex flex-col items-center text-center space-y-6 animate-fade-in">
         
-        {/* Circular Chikora Hawler Logo */}
-        <div className="relative group">
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#ba181b] via-[#f5a623] to-[#c2410c] opacity-80 blur-md group-hover:opacity-100 transition duration-500 animate-pulse" />
-          <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-br from-[#f5a623] via-[#ba181b] to-[#780016] shadow-[0_0_40px_rgba(245,166,35,0.45)]">
+        {/* Circular Chikora Logo with Fine Border */}
+        <div className="relative">
+          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full p-1 bg-white/10 backdrop-blur-xl border border-white/20 shadow-dialog">
             <img
               src="/chikora-logo.jpeg"
               alt="Chikora Hawler"
-              className="w-full h-full object-cover rounded-full border-2 border-white/20 shadow-inner"
+              className="w-full h-full object-cover rounded-full"
             />
           </div>
         </div>
 
-        {/* Restaurant Title & Slogan */}
+        {/* Restaurant Header */}
         <div className="space-y-1.5 px-4">
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-wide drop-shadow-md">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight drop-shadow-md">
             {isAr ? restaurantInfo.nameAr : isKu ? restaurantInfo.nameKu : restaurantInfo.name}
           </h1>
-          <p className="text-xs sm:text-sm text-[#f5a623] font-bold">
+          <p className="text-xs sm:text-sm text-amber-400 font-semibold drop-shadow">
             {isAr ? restaurantInfo.sloganAr : isKu ? restaurantInfo.sloganKu : restaurantInfo.slogan}
           </p>
-          <p className="text-[11px] text-gray-300/80 pt-1">
+          <p className="text-[11px] text-zinc-300 font-normal pt-0.5">
             {getSubTitle()}
           </p>
         </div>
 
-        {/* 3 Language Selection Cards (Matching Reference Image) */}
+        {/* 3 Frosted Glass Language Selection Cards */}
         <div className="w-full grid grid-cols-3 gap-2.5 sm:gap-3 px-2">
           {languages.map((l) => {
             const isSelected = lang === l.code;
@@ -156,26 +152,26 @@ export const LanguageGate = ({ onEnter }) => {
                 key={l.code}
                 onClick={() => setLang(l.code)}
                 type="button"
-                className={`relative flex flex-col items-center justify-center py-3.5 sm:py-4 px-2 rounded-2xl transition-all duration-200 ${
+                className={`relative flex flex-col items-center justify-center py-4 px-2 rounded-xl transition-all duration-150 ${
                   isSelected
-                    ? 'bg-gradient-to-b from-[#b91c1c]/70 to-[#881337]/90 border-2 border-[#f5a623] shadow-[0_0_20px_rgba(245,166,35,0.35)] scale-105'
-                    : 'bg-white/10 hover:bg-white/15 border border-white/15 text-gray-300 hover:text-white backdrop-blur-md'
+                    ? 'bg-amber-500/20 border-2 border-amber-400/80 text-white backdrop-blur-xl shadow-card scale-102'
+                    : 'bg-black/40 hover:bg-black/60 border border-white/15 text-zinc-300 hover:text-white backdrop-blur-xl'
                 }`}
               >
-                {/* Active Checkmark Pill */}
+                {/* Active Checkmark Indicator */}
                 {isSelected && (
-                  <div className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-[#f5a623] text-[#120609] flex items-center justify-center">
-                    <Check className="w-2.5 h-2.5 stroke-[4]" />
+                  <div className="absolute top-1.5 right-1.5 w-3.5 h-3.5 rounded-full bg-amber-400 text-zinc-950 flex items-center justify-center">
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
                   </div>
                 )}
 
-                <div className="mb-2 transition-transform duration-200 group-hover:scale-110">
+                <div className="mb-2 transition-transform duration-150">
                   {l.flag}
                 </div>
-                <span className="text-xs sm:text-sm font-black text-white tracking-wide">
+                <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
                   {l.name}
                 </span>
-                <span className="text-[10px] text-gray-300/70 mt-0.5">
+                <span className="text-[10px] text-zinc-400 mt-0.5 font-normal">
                   {l.subtitle}
                 </span>
               </button>
@@ -183,24 +179,24 @@ export const LanguageGate = ({ onEnter }) => {
           })}
         </div>
 
-        {/* Big Prominent "View Menu" Button (Exact style from reference screenshot) */}
-        <div className="w-full px-2 pt-2">
+        {/* Clean Amber CTA Button (Reference Style) */}
+        <div className="w-full px-2 pt-1">
           <button
             onClick={onEnter}
             type="button"
-            className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#e5a024] via-[#f5a623] to-[#d97706] hover:from-[#f5a623] hover:to-[#e5a024] text-[#140609] font-black text-base sm:text-lg shadow-[0_6px_25px_rgba(245,166,35,0.45)] hover:shadow-[0_8px_30px_rgba(245,166,35,0.6)] active:scale-98 transition-all duration-200 flex items-center justify-center gap-2 group"
+            className="w-full py-3.5 px-6 rounded-xl bg-amber-500 hover:bg-amber-400 text-zinc-950 font-extrabold text-sm sm:text-base shadow-card hover:shadow-card-hover active:scale-98 transition-all duration-150 flex items-center justify-center gap-2 group"
           >
             <span>{getButtonText()}</span>
             {isKu || isAr ? (
-              <ArrowLeft className="w-5 h-5 stroke-[2.5] group-hover:-translate-x-1 transition-transform" />
+              <ArrowLeft className="w-4 h-4 stroke-[2.5] group-hover:-translate-x-1 transition-transform" />
             ) : (
-              <ArrowRight className="w-5 h-5 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
             )}
           </button>
         </div>
 
-        {/* Small Footer Address hint */}
-        <div className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
+        {/* Subtle Erbil Address Hint */}
+        <div className="text-[11px] text-zinc-400 flex items-center justify-center gap-1.5 font-normal">
           <span>📍</span>
           <span>
             {isAr ? restaurantInfo.addressAr : isKu ? restaurantInfo.addressKu : restaurantInfo.address}

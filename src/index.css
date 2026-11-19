@@ -3,54 +3,94 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  :root {
+    color-scheme: dark;
   }
-  .font-kurdish {
-    font-family: 'Tajawal', 'Noto Sans Arabic', system-ui, sans-serif;
+  
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #09090b;
+    color: #f4f4f5;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Kurdish / Arabic font styling */
+  [lang="ku"], [lang="ar"], .font-kurdish {
+    font-family: 'Tajawal', 'Noto Sans Arabic', system-ui, -apple-system, sans-serif;
+    letter-spacing: normal;
   }
 }
 
-/* Custom Scrollbar */
+/* Refined Dark Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #150b0c;
+  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3a1a1f;
-  border-radius: 4px;
+  background: #27272a;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ba181b;
+  background: #3f3f46;
 }
 
-/* Gold Gradient Text */
-.gold-text-gradient {
-  background: linear-gradient(135deg, #FFE57F 0%, #F5A623 50%, #D48806 100%);
+/* Refined text gradient for prominent headers (Stripe / Linear style subtle metallic sheen) */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.gold-border-gradient {
-  border-image: linear-gradient(to right, #ba181b, #f5a623, #ba181b) 1;
+.text-gradient-brand {
+  background: linear-gradient(135deg, #ffffff 30%, #e4e4e7 70%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* Glowing animations */
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 15px rgba(245, 166, 35, 0.25);
+/* Glassmorphism surfaces */
+.glass-panel {
+  background-color: rgba(18, 18, 21, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background-color: rgba(24, 24, 28, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.glass-card:hover {
+  background-color: rgba(30, 30, 36, 0.85);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Micro animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
   }
-  50% {
-    box-shadow: 0 0 30px rgba(245, 166, 35, 0.55);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 3s infinite ease-in-out;
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
