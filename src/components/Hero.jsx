@@ -96,37 +96,37 @@ export const Hero = () => {
                 {isAr ? 'تصفية سريعة:' : isKu ? 'فلتەرکردنی خێرا:' : 'Filter:'}
               </span>
 
-              <div className="inline-flex p-0.5 rounded-lg bg-zinc-900 border border-white/[0.08]">
+              <div className="inline-flex p-1 rounded-xl bg-[#1e0e12] border border-[#38161e] gap-1">
                 <button
                   onClick={() => setTagFilter('all')}
-                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all ${
+                  className={`px-3.5 py-1 rounded-lg font-bold text-xs transition-all ${
                     tagFilter === 'all'
-                      ? 'bg-zinc-800 text-white shadow-subtle'
-                      : 'text-zinc-400 hover:text-zinc-200'
+                      ? 'bg-[#2a1318] text-white border border-[#4a1f28]'
+                      : 'text-gray-400 hover:text-white'
                   }`}
                 >
                   {isAr ? 'الكل' : isKu ? 'هەموو' : 'All'}
                 </button>
                 <button
                   onClick={() => setTagFilter(tagFilter === 'bestseller' ? 'all' : 'bestseller')}
-                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
                     tagFilter === 'bestseller'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 shadow-subtle'
-                      : 'text-zinc-400 hover:text-zinc-200'
+                      ? 'bg-[#f5a623] text-black shadow-md'
+                      : 'text-gray-400 hover:text-[#f5a623]'
                   }`}
                 >
-                  <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                  <Star className={`w-3.5 h-3.5 ${tagFilter === 'bestseller' ? 'fill-black text-black' : 'text-[#f5a623] fill-[#f5a623]'}`} />
                   <span>{isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Sellers'}</span>
                 </button>
                 <button
                   onClick={() => setTagFilter(tagFilter === 'spicy' ? 'all' : 'spicy')}
-                  className={`px-3 py-1 rounded-md font-medium text-xs transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
                     tagFilter === 'spicy'
-                      ? 'bg-red-500/20 text-red-300 border border-red-500/30 shadow-subtle'
-                      : 'text-zinc-400 hover:text-zinc-200'
+                      ? 'bg-[#ba181b] text-white shadow-md'
+                      : 'text-gray-400 hover:text-red-400'
                   }`}
                 >
-                  <Flame className="w-3.5 h-3.5 text-red-500 fill-red-500" />
+                  <Flame className={`w-3.5 h-3.5 ${tagFilter === 'spicy' ? 'fill-white text-white' : 'text-red-500 fill-red-500'}`} />
                   <span>{isAr ? 'الحار' : isKu ? 'تیژەکان' : 'Spicy Items'}</span>
                 </button>
               </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { Flame, Star, Sparkles, ChevronRight, Eye } from 'lucide-react';
+import { Flame, Star, Sparkles, Eye } from 'lucide-react';
 
 export const MenuCard = ({ item }) => {
   const { lang, formatPrice, setSelectedItemForModal } = useMenu();
@@ -22,18 +22,18 @@ export const MenuCard = ({ item }) => {
   };
 
   return (
-    <article className="group relative bg-zinc-900/60 hover:bg-zinc-900 border border-white/[0.08] hover:border-white/[0.18] rounded-xl overflow-hidden transition-all duration-200 flex flex-col justify-between shadow-subtle hover:shadow-card-hover">
+    <article className="group relative bg-[#180b0e] hover:bg-[#1f0e12] border border-[#2e151a] hover:border-[#f5a623]/60 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-0.5">
       
       {/* Food Image Container */}
       <div 
         onClick={() => setSelectedItemForModal(item)}
-        className="relative aspect-[16/11] w-full overflow-hidden cursor-pointer bg-zinc-950"
+        className="relative aspect-[16/11] w-full overflow-hidden cursor-pointer bg-[#241014]"
       >
         <img
           src={item.image || 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80'}
           alt={item.name}
           loading="lazy"
-          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+          className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
             isOutOfStock ? 'grayscale opacity-50' : ''
           }`}
           onError={(e) => {
@@ -43,22 +43,22 @@ export const MenuCard = ({ item }) => {
         />
 
         {/* Subtle dark gradient overlay at base of image */}
-        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-black/20 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#180b0e] via-transparent to-black/25 pointer-events-none" />
 
-        {/* Minimalist Badges */}
-        <div className="absolute top-2.5 left-2.5 rtl:left-auto rtl:right-2.5 flex flex-col gap-1 z-10">
+        {/* Rich Brand Badges (Star / Flame Vector Icons) */}
+        <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 flex flex-col gap-1.5 z-10">
           {item.tag && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-semibold bg-zinc-950/80 text-white backdrop-blur-md border border-white/10 shadow-sm">
-              {item.tag === 'Best Seller' && <Star className="w-3 h-3 text-amber-400 fill-amber-400" />}
-              {item.tag === 'Spicy' && <Flame className="w-3 h-3 text-red-500 fill-red-500" />}
-              {item.tag === 'Chef Special' && <Sparkles className="w-3 h-3 text-amber-400" />}
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-md bg-gradient-to-r from-[#ba181b] to-[#c2410c] text-white border border-[#f5a623]/40">
+              {item.tag === 'Best Seller' && <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />}
+              {item.tag === 'Spicy' && <Flame className="w-3.5 h-3.5 text-white fill-white" />}
+              {item.tag === 'Chef Special' && <Sparkles className="w-3.5 h-3.5 text-yellow-300" />}
               <span>{getTagLabel(item.tag)}</span>
             </span>
           )}
 
           {item.isSpicy && !item.tag?.includes('Spicy') && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold bg-red-950/80 text-red-300 backdrop-blur-md border border-red-800/40">
-              <Flame className="w-3 h-3 text-red-400 fill-red-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-[#ba181b] text-white shadow-md border border-red-400/40">
+              <Flame className="w-3 h-3 text-white fill-white" />
               <span>{isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}</span>
             </span>
           )}
@@ -67,7 +67,7 @@ export const MenuCard = ({ item }) => {
         {/* Out of Stock Notice */}
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex items-center justify-center z-20">
-            <span className="px-3 py-1 rounded-md bg-zinc-900/90 text-zinc-300 text-xs font-semibold tracking-wider uppercase border border-white/10">
+            <span className="px-3.5 py-1 rounded-lg bg-red-600/90 text-white text-xs font-black tracking-wider uppercase border border-red-400">
               {isAr ? 'نفذت الكمية' : isKu ? 'تەواوبووە' : 'Sold Out'}
             </span>
           </div>
@@ -75,8 +75,8 @@ export const MenuCard = ({ item }) => {
 
         {/* Quick View Hover Hint */}
         <div className="absolute bottom-2.5 right-2.5 rtl:right-auto rtl:left-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-zinc-950/90 backdrop-blur-md text-[11px] text-zinc-200 border border-white/10">
-            <Eye className="w-3 h-3 text-amber-400" />
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-md text-[11px] font-bold text-gray-200 border border-white/15">
+            <Eye className="w-3.5 h-3.5 text-[#f5a623]" />
             <span>{isAr ? 'التفاصيل' : isKu ? 'وردەکاری' : 'Details'}</span>
           </span>
         </div>
@@ -87,40 +87,40 @@ export const MenuCard = ({ item }) => {
         <div>
           <h3 
             onClick={() => setSelectedItemForModal(item)}
-            className="font-bold text-white text-base group-hover:text-amber-400 transition-colors cursor-pointer line-clamp-1"
+            className="font-black text-white text-base sm:text-lg group-hover:text-[#f5a623] transition-colors cursor-pointer line-clamp-1"
           >
             {name}
           </h3>
           {secondaryName && (
-            <p className="text-xs text-zinc-400 font-normal mt-0.5 line-clamp-1">
+            <p className="text-xs text-[#f5a623] font-semibold mt-0.5 line-clamp-1">
               {secondaryName}
             </p>
           )}
 
           {description && (
-            <p className="text-xs text-zinc-400 mt-2 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-gray-400 mt-2 line-clamp-2 leading-relaxed">
               {description}
             </p>
           )}
         </div>
 
-        {/* Footer: Tabular Price & Action */}
-        <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
-          <div>
-            <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-medium block">
+        {/* Footer: Price in Bold Gold & Detail Action */}
+        <div className="pt-3 border-t border-[#291318] flex items-center justify-between">
+          <div className="flex flex-col">
+            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
               {isAr ? 'السعر' : isKu ? 'نرخ' : 'Price'}
             </span>
-            <span className="text-sm sm:text-base font-bold text-white tabular-nums tracking-tight">
+            <span className="text-base sm:text-lg font-black text-[#f5a623] tabular-nums tracking-tight">
               {formatPrice(item.price)}
             </span>
           </div>
 
           <button
             onClick={() => setSelectedItemForModal(item)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white border border-white/[0.08] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#241014] hover:bg-[#34161c] text-[#f5a623] border border-[#441c24] hover:border-[#f5a623]/60 transition-all duration-200"
           >
-            <span>{isAr ? 'التفاصيل' : isKu ? 'بینین' : 'View'}</span>
-            <ChevronRight className="w-3.5 h-3.5 text-zinc-400 rtl:rotate-180" />
+            <Eye className="w-3.5 h-3.5 text-[#f5a623]" />
+            <span>{isAr ? 'التفاصيل' : isKu ? 'وردەکاری' : 'Details'}</span>
           </button>
         </div>
 

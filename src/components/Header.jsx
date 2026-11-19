@@ -7,7 +7,8 @@ import {
   ArrowRight,
   ChevronDown,
   Check,
-  Globe
+  Globe,
+  Flame
 } from 'lucide-react';
 
 export const Header = () => {
@@ -56,17 +57,18 @@ export const Header = () => {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 bg-zinc-950/85 backdrop-blur-xl border-b border-white/[0.08] transition-all">
-      {/* Top micro announcement bar - clean & minimalist */}
-      <div className="bg-zinc-900/90 border-b border-white/[0.05] text-zinc-300 text-[11px] py-1 px-4 text-center tracking-wide flex items-center justify-center gap-2">
-        <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-        <span className="font-medium">
+    <header className="sticky top-0 z-40 bg-[#12080a]/95 backdrop-blur-xl border-b border-[#2e151a] shadow-lg transition-all">
+      {/* Top announcement bar - rich Chikora fire gradient */}
+      <div className="bg-gradient-to-r from-[#ba181b] via-[#ea580c] to-[#ba181b] text-white text-xs font-bold py-1.5 px-4 text-center tracking-wide flex items-center justify-center gap-2 shadow-sm">
+        <Flame className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300 flex-shrink-0" />
+        <span>
           {isAr
-            ? 'أهلاً بكم في تشيكورا هولير - أشهى وأقرمش دجاج مقلي في أربيل'
+            ? 'أهلاً بكم في تشيكورا هولير - أشهى وأقرمش دجاج مقلي في أربيل!'
             : isKu
-            ? 'بەخێربێن بۆ چیکۆرا هه‌ولێر - باشترین مریشکی کریسپی و برژاو لە هەولێر'
-            : 'Welcome to Chikora Hawler - The Crispiest Golden Fried Chicken in Erbil'}
+            ? 'بەخێربێن بۆ چیکۆرا هه‌ولێر - باشترین مریشکی کریسپی و برژاو لە هەولێر!'
+            : 'Welcome to Chikora Hawler - The Crispiest Golden Fried Chicken in Erbil!'}
         </span>
+        <Flame className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300 flex-shrink-0" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,21 +83,21 @@ export const Header = () => {
               <img
                 src="/chikora-logo.jpeg"
                 alt="Chikora Hawler"
-                className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover ring-1 ring-white/15 group-hover:ring-amber-500/50 transition-all duration-300"
+                className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-[#f5a623] shadow-md group-hover:scale-105 transition-all duration-300"
               />
             </div>
 
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="text-base sm:text-lg font-bold tracking-tight text-white group-hover:text-amber-400 transition-colors">
+                <span className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-[#f5a623] transition-colors">
                   CHIKORA
                 </span>
-                <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-white/[0.06] text-amber-400 border border-white/[0.08] tracking-wider uppercase">
+                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-[#ba181b]/30 text-[#f5a623] border border-[#ba181b]/60 tracking-wider uppercase">
                   Hawler
                 </span>
               </div>
-              <span className="text-[11px] font-medium text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                {isAr ? 'تشيكورا هولير' : isKu ? 'چیکۆرا هه‌ولێر' : 'Fast Food & Grills'}
+              <span className="text-xs font-semibold text-[#f5a623] tracking-wide">
+                {isAr ? 'تشيكورا هولير' : 'چیکۆرا هه‌ولێر'}
               </span>
             </div>
           </div>
@@ -104,31 +106,31 @@ export const Header = () => {
           {!isAdminRoute && (
             <div className="hidden md:flex flex-1 max-w-md mx-4">
               <div className="relative w-full">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 <input
                   ref={searchInputRef}
                   type="text"
                   placeholder={
                     isAr
-                      ? 'ابحث في القائمة...'
+                      ? 'البحث في منيو تشيكورا...'
                       : isKu
                       ? 'گەڕان لە مێنیوی چیکۆرا...'
                       : 'Search dishes, crispy chicken, burgers...'
                   }
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-zinc-900/70 hover:bg-zinc-900 text-zinc-100 text-xs sm:text-sm pl-10 pr-16 py-2 rounded-lg border border-white/[0.08] focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/30 focus:outline-none transition-all placeholder:text-zinc-500"
+                  className="w-full bg-[#1e0e12] hover:bg-[#251117] text-white text-xs sm:text-sm pl-10 pr-16 py-2.5 rounded-xl border border-[#3b1c22] focus:border-[#f5a623] focus:ring-1 focus:ring-[#f5a623]/30 focus:outline-none transition-all placeholder:text-gray-500"
                 />
                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
                   {searchQuery ? (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="text-zinc-400 hover:text-white p-0.5"
+                      className="text-gray-400 hover:text-white p-0.5"
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                   ) : (
-                    <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 bg-zinc-800/60 border border-zinc-700/50 rounded">
+                    <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-medium text-gray-400 bg-[#281318] border border-[#3d1920] rounded">
                       <span>⌘</span>K
                     </kbd>
                   )}
@@ -143,7 +145,7 @@ export const Header = () => {
             {isAdminRoute && (
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-white/[0.08] text-xs font-semibold transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#241116] hover:bg-[#341820] text-[#f5a623] border border-[#4a222a] text-xs font-bold transition-all"
               >
                 {isRtl ? <ArrowRight className="w-3.5 h-3.5" /> : <ArrowLeft className="w-3.5 h-3.5" />}
                 <span>
@@ -157,36 +159,36 @@ export const Header = () => {
               <button
                 type="button"
                 onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-200 hover:text-white text-xs font-semibold border border-white/[0.08] transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#241116] hover:bg-[#341820] text-gray-200 hover:text-white text-xs font-bold border border-[#3d1d24] transition-all"
                 title="Select Language"
               >
-                <Globe className="w-3.5 h-3.5 text-amber-400" />
+                <Globe className="w-3.5 h-3.5 text-[#f5a623]" />
                 <span className={isRtl ? 'font-kurdish' : ''}>
                   {currentLangLabel}
                 </span>
                 <ChevronDown
-                  className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
-                    isLangDropdownOpen ? 'rotate-180 text-amber-400' : ''
+                  className={`w-3.5 h-3.5 text-gray-400 transition-transform duration-200 ${
+                    isLangDropdownOpen ? 'rotate-180 text-[#f5a623]' : ''
                   }`}
                 />
               </button>
 
               {isLangDropdownOpen && (
-                <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-44 bg-zinc-900/95 border border-white/[0.1] rounded-xl shadow-dialog py-1.5 z-50 backdrop-blur-xl animate-fade-in">
+                <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-44 bg-[#1b0d10] border border-[#3e1b23] rounded-xl shadow-2xl py-1.5 z-50 backdrop-blur-xl animate-fade-in">
                   <button
                     type="button"
                     onClick={() => {
                       setLang('ku');
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium font-kurdish transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold font-kurdish transition-colors ${
                       lang === 'ku'
-                        ? 'bg-white/[0.08] text-amber-400'
-                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
+                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
                     }`}
                   >
                     <span>کوردی (Kurdî)</span>
-                    {lang === 'ku' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
+                    {lang === 'ku' && <Check className="w-3.5 h-3.5 text-[#f5a623] stroke-[3]" />}
                   </button>
 
                   <button
@@ -195,14 +197,14 @@ export const Header = () => {
                       setLang('ar');
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium font-kurdish transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold font-kurdish transition-colors ${
                       lang === 'ar'
-                        ? 'bg-white/[0.08] text-amber-400'
-                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
+                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
                     }`}
                   >
                     <span>العربية (Arabic)</span>
-                    {lang === 'ar' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
+                    {lang === 'ar' && <Check className="w-3.5 h-3.5 text-[#f5a623] stroke-[3]" />}
                   </button>
 
                   <button
@@ -211,26 +213,26 @@ export const Header = () => {
                       setLang('en');
                       setIsLangDropdownOpen(false);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2 text-xs font-bold transition-colors ${
                       lang === 'en'
-                        ? 'bg-white/[0.08] text-amber-400'
-                        : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'
+                        ? 'bg-[#ba181b]/30 text-[#f5a623]'
+                        : 'text-gray-300 hover:bg-[#281318] hover:text-white'
                     }`}
                   >
                     <span>English</span>
-                    {lang === 'en' && <Check className="w-3.5 h-3.5 text-amber-400 stroke-[3]" />}
+                    {lang === 'en' && <Check className="w-3.5 h-3.5 text-[#f5a623] stroke-[3]" />}
                   </button>
 
-                  <div className="pt-1 mt-1 border-t border-white/[0.08]">
+                  <div className="pt-1 mt-1 border-t border-[#311318]">
                     <button
                       type="button"
                       onClick={() => {
                         setIsLangDropdownOpen(false);
                         openLanguageGate();
                       }}
-                      className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-zinc-400 hover:text-amber-400 hover:bg-zinc-800/60 transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-1.5 text-[11px] text-gray-400 hover:text-[#f5a623] hover:bg-[#281318] transition-colors"
                     >
-                      <Globe className="w-3 h-3 text-zinc-400" />
+                      <Globe className="w-3 h-3 text-[#f5a623]" />
                       <span>{isAr ? 'شاشة الترحيب واختيار اللغة' : isKu ? 'شاشەی دەستپێک و زمانەکان' : 'Welcome Screen'}</span>
                     </button>
                   </div>
@@ -244,24 +246,24 @@ export const Header = () => {
         {!isAdminRoute && (
           <div className="md:hidden pb-3">
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder={
                   isAr
-                    ? 'ابحث في القائمة...'
+                    ? 'البحث في منيو تشيكورا...'
                     : isKu
                     ? 'گەڕان لە مێنیوی چیکۆرا...'
-                    : 'Search dishes, meals...'
+                    : 'Search chicken, burgers...'
                 }
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-zinc-900/80 text-zinc-100 text-xs pl-9 pr-8 py-2 rounded-lg border border-white/[0.08] focus:border-amber-500/50 focus:outline-none placeholder:text-zinc-500"
+                className="w-full bg-[#1e0e12] text-white text-xs pl-9 pr-8 py-2 rounded-xl border border-[#3b1c22] focus:border-[#f5a623] focus:outline-none placeholder:text-gray-500"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>

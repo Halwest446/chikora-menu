@@ -8,7 +8,7 @@ import { ItemModal } from './components/ItemModal';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
 import { LanguageGate } from './components/LanguageGate';
-import { Search, Utensils } from 'lucide-react';
+import { Search, Flame } from 'lucide-react';
 
 const MainContent = () => {
   const {
@@ -82,11 +82,11 @@ const MainContent = () => {
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             
             {/* Section Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 border-b border-white/[0.08] pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8 border-b border-[#291318] pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Utensils className="w-4 h-4 text-amber-400" />
-                  <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  <Flame className="w-5 h-5 text-[#ba181b]" />
+                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
                     {isAr
                       ? activeCategory === 'all'
                         ? 'قائمة تشيكورا الكاملة'
