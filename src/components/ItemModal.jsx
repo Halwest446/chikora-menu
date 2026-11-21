@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMenu } from '../context/MenuContext';
-import { X, Check, Flame, Star, Sparkles, Layers, ShoppingBag } from 'lucide-react';
+import { X, Check, Flame, Layers, ShoppingBag } from 'lucide-react';
 
 export const ItemModal = () => {
   const { selectedItemForModal, setSelectedItemForModal, lang, formatPrice, addToCart } = useMenu();
@@ -24,14 +24,6 @@ export const ItemModal = () => {
   const hasSizes = Array.isArray(item.sizes) && item.sizes.length > 0;
   const selectedSize = hasSizes ? item.sizes[selectedSizeIndex] || item.sizes[0] : null;
   const activePrice = selectedSize ? Number(selectedSize.price) : Number(item.price);
-
-  const getTagLabel = (tag) => {
-    if (tag === 'Best Seller') return isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Seller';
-    if (tag === 'Spicy') return isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy';
-    if (tag === 'Chef Special') return isAr ? 'توقيع الشيف' : isKu ? 'تایبەتی شێف' : 'Chef Special';
-    if (tag === 'New') return isAr ? 'جديد' : isKu ? 'نوێ' : 'New';
-    return tag;
-  };
 
   const handleAddCurrentToCart = () => {
     addToCart(item, 1, '', selectedSize);
@@ -67,17 +59,6 @@ export const ItemModal = () => {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#190c0f] via-transparent to-black/30" />
-          
-          {item.tag && (
-            <div className="absolute bottom-3 left-3 rtl:left-auto rtl:right-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-lg bg-gradient-to-r from-[#ba181b] to-[#c2410c] text-white border border-[#f5a623]/50">
-                {item.tag === 'Best Seller' && <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />}
-                {item.tag === 'Spicy' && <Flame className="w-3.5 h-3.5 text-white fill-white" />}
-                {item.tag === 'Chef Special' && <Sparkles className="w-3.5 h-3.5 text-yellow-300" />}
-                <span>{getTagLabel(item.tag)}</span>
-              </span>
-            </div>
-          )}
         </div>
 
         {/* Scrollable Content */}

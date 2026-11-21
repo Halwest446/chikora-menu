@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { Flame, Star, Sparkles, Eye, Layers } from 'lucide-react';
+import { Eye, Layers } from 'lucide-react';
 
 export const MenuCard = ({ item }) => {
   const { lang, formatPrice, setSelectedItemForModal } = useMenu();
@@ -14,14 +14,6 @@ export const MenuCard = ({ item }) => {
   const isOutOfStock = item.inStock === false;
   const hasSizes = Array.isArray(item.sizes) && item.sizes.length > 0;
   const displayPrice = hasSizes ? Math.min(...item.sizes.map((s) => Number(s.price))) : item.price;
-
-  const getTagLabel = (tag) => {
-    if (tag === 'Best Seller') return isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Seller';
-    if (tag === 'Spicy') return isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy';
-    if (tag === 'Chef Special') return isAr ? 'توقيع الشيف' : isKu ? 'تایبەتی شێف' : 'Chef Special';
-    if (tag === 'New') return isAr ? 'جديد' : isKu ? 'نوێ' : 'New';
-    return tag;
-  };
 
   return (
     <article className="group relative bg-[#180b0e] hover:bg-[#1f0e12] border border-[#2e151a] hover:border-[#f5a623]/60 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between shadow-lg hover:shadow-2xl hover:-translate-y-0.5">
@@ -47,31 +39,15 @@ export const MenuCard = ({ item }) => {
         {/* Subtle dark gradient overlay at base of image */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#180b0e] via-transparent to-black/25 pointer-events-none" />
 
-        {/* Rich Brand Badges (Star / Flame Vector Icons) */}
-        <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 flex flex-col gap-1.5 z-10">
-          {item.tag && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black shadow-md bg-gradient-to-r from-[#ba181b] to-[#c2410c] text-white border border-[#f5a623]/40">
-              {item.tag === 'Best Seller' && <Star className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300" />}
-              {item.tag === 'Spicy' && <Flame className="w-3.5 h-3.5 text-white fill-white" />}
-              {item.tag === 'Chef Special' && <Sparkles className="w-3.5 h-3.5 text-yellow-300" />}
-              <span>{getTagLabel(item.tag)}</span>
-            </span>
-          )}
-
-          {item.isSpicy && !item.tag?.includes('Spicy') && (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-[#ba181b] text-white shadow-md border border-red-400/40">
-              <Flame className="w-3 h-3 text-white fill-white" />
-              <span>{isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}</span>
-            </span>
-          )}
-
-          {hasSizes && (
+        {/* Multiple Sizes Indicator */}
+        {hasSizes && (
+          <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 z-10">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-black/80 backdrop-blur-md text-[#f5a623] border border-[#f5a623]/40 shadow-md">
               <Layers className="w-3 h-3 text-[#f5a623]" />
               <span>{item.sizes.map((s) => s.name).join(' / ')}</span>
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Out of Stock Notice */}
         {isOutOfStock && (
