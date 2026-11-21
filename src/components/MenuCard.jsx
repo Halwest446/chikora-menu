@@ -44,7 +44,7 @@ export const MenuCard = ({ item }) => {
           <div className="absolute top-3 left-3 rtl:left-auto rtl:right-3 z-10">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-black/80 backdrop-blur-md text-[#f5a623] border border-[#f5a623]/40 shadow-md">
               <Layers className="w-3 h-3 text-[#f5a623]" />
-              <span>{item.sizes.map((s) => s.name).join(' / ')}</span>
+              <span>{item.sizes.length} {isAr ? 'أحجام' : isKu ? 'قەبارە' : 'Sizes'}</span>
             </span>
           </div>
         )}
@@ -87,12 +87,38 @@ export const MenuCard = ({ item }) => {
               {description}
             </p>
           )}
+
+          {/* Direct visible size values & prices on card without clicking */}
+          {hasSizes && (
+            <div className="pt-2.5 space-y-1.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400">
+                <Layers className="w-3.5 h-3.5 text-[#f5a623]" />
+                <span>{isAr ? 'الأحجام والأسعار:' : isKu ? 'قەبارە و نرخەکان:' : 'Sizes & Prices:'}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {item.sizes.map((s, idx) => (
+                  <div
+                    key={idx}
+                    className="p-2 rounded-xl bg-[#220f13] border border-[#3d1820] flex flex-col justify-between"
+                  >
+                    <span className="text-xs font-bold text-gray-200 line-clamp-1">{s.name}</span>
+                    <span className="text-xs font-black text-[#f5a623] mt-0.5 tabular-nums">
+                      {formatPrice(s.price)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer: Price in Bold Gold & Detail Action */}
         <div className="pt-3 border-t border-[#291318] flex items-center justify-between gap-2">
           {hasSizes ? (
             <div className="flex flex-col">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                {isAr ? 'ملاحظة السعر' : isKu ? 'شێوازی نرخ' : 'Pricing'}
+              </span>
               <span className="text-xs sm:text-sm font-black text-[#f5a623] leading-snug">
                 {isAr
                   ? 'السعر يحدد حسب الحجم'
