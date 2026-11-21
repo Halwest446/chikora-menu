@@ -261,7 +261,7 @@ export const AdminPanel = () => {
   };
 
   // Compress and resize image client-side to prevent localStorage quota issues & handle any file size
-  const compressImage = (file, maxWidth = 1200, maxHeight = 1200, quality = 0.82) => {
+  const compressImage = (file, maxWidth = 750, maxHeight = 750, quality = 0.72) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -311,7 +311,7 @@ export const AdminPanel = () => {
 
     try {
       setFormError('');
-      const compressedBase64 = await compressImage(file, 1200, 1200, 0.82);
+      const compressedBase64 = await compressImage(file, 750, 750, 0.72);
       setFormImage(compressedBase64);
     } catch (err) {
       console.error(err);

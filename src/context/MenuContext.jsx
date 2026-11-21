@@ -1,6 +1,26 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { DEFAULT_ITEMS, DEFAULT_CATEGORIES, RESTAURANT_INFO } from '../data/defaultMenu';
 
+const safeSetLocalStorage = (key, value) => {
+  try {
+    const serialized = typeof value === 'string' ? value : JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+  } catch (e) {
+    console.warn(`LocalStorage quota exceeded when saving "${key}". Using fallback mode.`);
+    if (key === 'chikora_menu_items' && Array.isArray(value)) {
+      try {
+        const stripped = value.map((item) => ({
+          ...item,
+          image: item.image && item.image.startsWith('data:') && item.image.length > 500 ? '' : item.image,
+        }));
+        localStorage.setItem(key, JSON.stringify(stripped));
+      } catch (innerErr) {
+        console.warn('Failed to save even stripped items to localStorage:', innerErr);
+      }
+    }
+  }
+};
+
 const MenuContext = createContext();
 
 export const MenuProvider = ({ children }) => {
@@ -243,20 +263,20 @@ export const MenuProvider = ({ children }) => {
 
   // Sync to localStorage as backup
   useEffect(() => {
-    localStorage.setItem('chikora_menu_items', JSON.stringify(items));
+    safeSetLocalStorage('chikora_menu_items', items);
   }, [items]);
 
   useEffect(() => {
-    localStorage.setItem('chikora_categories', JSON.stringify(categories));
+    safeSetLocalStorage('chikora_categories', categories);
   }, [categories]);
 
   useEffect(() => {
-    localStorage.setItem('chikora_info', JSON.stringify(restaurantInfo));
+    safeSetLocalStorage('chikora_info', restaurantInfo);
   }, [restaurantInfo]);
 
   // Sync language
   useEffect(() => {
-    localStorage.setItem('chikora_lang', lang);
+    safeSetLocalStorage('chikora_lang', lang);
     const isRtl = lang === 'ku' || lang === 'ar';
     document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
@@ -264,7 +284,7 @@ export const MenuProvider = ({ children }) => {
 
   // Sync cart
   useEffect(() => {
-    localStorage.setItem('chikora_cart', JSON.stringify(cart));
+    safeSetLocalStorage('chikora_cart', cart);
   }, [cart]);
 
   // FETCH FROM SQLITE DATABASE ON MOUNT & AUTO-SYNC
@@ -282,20 +302,23 @@ export const MenuProvider = ({ children }) => {
             const localSavedCats = localStorage.getItem('chikora_categories');
             const localSavedInfo = localStorage.getItem('chikora_info');
 
-            // If user has customized items or categories locally, sync up to SQLite and preserve user edits
+            // If user has customized items or categories locally, sync up to SQLite if admin is authenticated
             if (hasCustomData && (localSavedItems || localSavedCats)) {
-              try {
-                await fetch('/api/sync', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    items: localSavedItems ? JSON.parse(localSavedItems) : items,
-                    categories: localSavedCats ? JSON.parse(localSavedCats) : categories,
-                    restaurantInfo: localSavedInfo ? JSON.parse(localSavedInfo) : restaurantInfo,
-                  }),
-                });
-              } catch (e) {
-                // Ignore sync errors
+              const authHeaders = getAuthHeaders();
+              if (authHeaders && authHeaders.Authorization) {
+                try {
+                  await fetch('/api/sync', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', ...authHeaders },
+                    body: JSON.stringify({
+                      items: localSavedItems ? JSON.parse(localSavedItems) : items,
+                      categories: localSavedCats ? JSON.parse(localSavedCats) : categories,
+                      restaurantInfo: localSavedInfo ? JSON.parse(localSavedInfo) : restaurantInfo,
+                    }),
+                  });
+                } catch (e) {
+                  // Ignore sync errors
+                }
               }
               // Do NOT overwrite user's custom changes with default data
               return;
