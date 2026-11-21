@@ -1,9 +1,9 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { MapPin, Clock, Phone, Sparkles, Flame, Award, Star } from 'lucide-react';
+import { MapPin, Clock, Phone, Sparkles, Award } from 'lucide-react';
 
 export const Hero = () => {
-  const { lang, restaurantInfo, tagFilter, setTagFilter } = useMenu();
+  const { lang, restaurantInfo } = useMenu();
   const isKu = lang === 'ku';
   const isAr = lang === 'ar';
 
@@ -87,48 +87,6 @@ export const Hero = () => {
               <div className="inline-flex items-center gap-2 text-xs text-zinc-400 bg-zinc-900/50 px-3 py-2 rounded-lg border border-white/[0.05]">
                 <MapPin className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
                 <span>{isAr ? restaurantInfo.addressAr : isKu ? restaurantInfo.addressKu : restaurantInfo.address}</span>
-              </div>
-            </div>
-
-            {/* Segmented Quick Filters */}
-            <div className="pt-4 border-t border-white/[0.08] flex items-center justify-center lg:justify-start rtl:lg:justify-start gap-2 text-xs">
-              <span className="text-zinc-500 font-medium">
-                {isAr ? 'تصفية سريعة:' : isKu ? 'فلتەرکردنی خێرا:' : 'Filter:'}
-              </span>
-
-              <div className="inline-flex p-1 rounded-xl bg-[#1e0e12] border border-[#38161e] gap-1">
-                <button
-                  onClick={() => setTagFilter('all')}
-                  className={`px-3.5 py-1 rounded-lg font-bold text-xs transition-all ${
-                    tagFilter === 'all'
-                      ? 'bg-[#2a1318] text-white border border-[#4a1f28]'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  {isAr ? 'الكل' : isKu ? 'هەموو' : 'All'}
-                </button>
-                <button
-                  onClick={() => setTagFilter(tagFilter === 'bestseller' ? 'all' : 'bestseller')}
-                  className={`px-3 py-1 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
-                    tagFilter === 'bestseller'
-                      ? 'bg-[#f5a623] text-black shadow-md'
-                      : 'text-gray-400 hover:text-[#f5a623]'
-                  }`}
-                >
-                  <Star className={`w-3.5 h-3.5 ${tagFilter === 'bestseller' ? 'fill-black text-black' : 'text-[#f5a623] fill-[#f5a623]'}`} />
-                  <span>{isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Sellers'}</span>
-                </button>
-                <button
-                  onClick={() => setTagFilter(tagFilter === 'spicy' ? 'all' : 'spicy')}
-                  className={`px-3 py-1 rounded-lg font-bold text-xs transition-all flex items-center gap-1.5 ${
-                    tagFilter === 'spicy'
-                      ? 'bg-[#ba181b] text-white shadow-md'
-                      : 'text-gray-400 hover:text-red-400'
-                  }`}
-                >
-                  <Flame className={`w-3.5 h-3.5 ${tagFilter === 'spicy' ? 'fill-white text-white' : 'text-red-500 fill-red-500'}`} />
-                  <span>{isAr ? 'الحار' : isKu ? 'تیژەکان' : 'Spicy Items'}</span>
-                </button>
               </div>
             </div>
           </div>
