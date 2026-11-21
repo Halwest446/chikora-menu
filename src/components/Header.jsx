@@ -65,7 +65,7 @@ export const Header = () => {
           {isAr
             ? 'أهلاً بكم في تشيكورا هولير - أشهى وأقرمش دجاج مقلي في أربيل!'
             : isKu
-            ? 'بەخێربێن بۆ چیکۆرا هه‌ولێر - باشترین مریشکی کریسپی و برژاو لە هەولێر!'
+            ? 'تامە خۆشەکان لای ئێمەیە'
             : 'Welcome to Chikora Hawler - The Crispiest Golden Fried Chicken in Erbil!'}
         </span>
         <Flame className="w-3.5 h-3.5 text-yellow-300 fill-yellow-300 flex-shrink-0" />

@@ -39,7 +39,7 @@ export const Hero = () => {
               </>
             ) : isKu ? (
               <>
-                بەخێربێن بۆ <span className="text-gradient-gold">چیکۆرا هه‌ولێر</span>
+                بەخێربێن بۆ <span className="text-gradient-gold">چیکۆرا</span>
               </>
             ) : (
               <>
