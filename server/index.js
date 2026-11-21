@@ -126,8 +126,8 @@ export const requireAdminAuth = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   try {
     const session = await getQuery(
-      `SELECT s.*, a.username FROM sessions s
-       JOIN admins a ON s.adminId = a.id
+      `SELECT s.*, COALESCE(a.username, 'admin') AS username FROM sessions s
+       LEFT JOIN admins a ON s.adminId = a.id
        WHERE s.token = ?`,
       [token]
     );

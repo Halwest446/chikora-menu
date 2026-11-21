@@ -10,7 +10,7 @@ export const MenuProvider = ({ children }) => {
       const saved = localStorage.getItem('chikora_menu_items');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === DEFAULT_ITEMS.length) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
@@ -26,7 +26,7 @@ export const MenuProvider = ({ children }) => {
       const saved = localStorage.getItem('chikora_categories');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === DEFAULT_CATEGORIES.length) {
+        if (Array.isArray(parsed) && parsed.length > 0) {
           return parsed;
         }
       }
@@ -277,24 +277,28 @@ export const MenuProvider = ({ children }) => {
           if (data.success) {
             setIsDbConnected(true);
 
-            // Check if this browser already had custom user items that need pushing to SQLite
-            const localSaved = localStorage.getItem('chikora_menu_items');
-            if (localSaved) {
-              const parsedLocal = JSON.parse(localSaved);
-              // If local has items and SQLite had fewer or different items, push to SQLite
-              if (parsedLocal && parsedLocal.length > 0 && (!data.items || data.items.length === 0)) {
+            const hasCustomData = localStorage.getItem('chikora_has_custom_data') === 'true';
+            const localSavedItems = localStorage.getItem('chikora_menu_items');
+            const localSavedCats = localStorage.getItem('chikora_categories');
+            const localSavedInfo = localStorage.getItem('chikora_info');
+
+            // If user has customized items or categories locally, sync up to SQLite and preserve user edits
+            if (hasCustomData && (localSavedItems || localSavedCats)) {
+              try {
                 await fetch('/api/sync', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    items: parsedLocal,
-                    categories,
-                    restaurantInfo,
+                    items: localSavedItems ? JSON.parse(localSavedItems) : items,
+                    categories: localSavedCats ? JSON.parse(localSavedCats) : categories,
+                    restaurantInfo: localSavedInfo ? JSON.parse(localSavedInfo) : restaurantInfo,
                   }),
                 });
-                setItems(parsedLocal);
-                return;
+              } catch (e) {
+                // Ignore sync errors
               }
+              // Do NOT overwrite user's custom changes with default data
+              return;
             }
 
             if (data.items && data.items.length > 0) {
@@ -318,6 +322,7 @@ export const MenuProvider = ({ children }) => {
 
   // Item Actions (Syncs to SQLite Database & Local State)
   const addItem = async (newItem) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     const itemWithId = {
       ...newItem,
       id: newItem.id || `item-${Date.now()}`,
@@ -348,6 +353,7 @@ export const MenuProvider = ({ children }) => {
   };
 
   const updateItem = async (id, updatedFields) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setItems((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, ...updatedFields, price: Number(updatedFields.price ?? item.price) } : item
@@ -366,6 +372,7 @@ export const MenuProvider = ({ children }) => {
   };
 
   const deleteItem = async (id) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setItems((prev) => prev.filter((item) => item.id !== id));
     try {
       await fetch(`/api/items/${id}`, {
@@ -378,6 +385,7 @@ export const MenuProvider = ({ children }) => {
   };
 
   const toggleStock = async (id) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setItems((prev) =>
       prev.map((item) => (item.id === id ? { ...item, inStock: !item.inStock } : item))
     );
@@ -393,6 +401,7 @@ export const MenuProvider = ({ children }) => {
 
   // Category Actions
   const addCategory = async (categoryData) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     const newCat = {
       id: categoryData.id || `cat-${Date.now()}`,
       nameEn: categoryData.nameEn,
@@ -414,6 +423,7 @@ export const MenuProvider = ({ children }) => {
   };
 
   const updateCategory = async (catId, categoryData) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setCategories((prev) =>
       prev.map((c) =>
         c.id === catId
@@ -441,6 +451,7 @@ export const MenuProvider = ({ children }) => {
 
   const deleteCategory = async (catId) => {
     if (catId === 'all') return;
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setCategories((prev) => prev.filter((c) => c.id !== catId));
     setItems((prev) =>
       prev.map((item) => (item.category === catId ? { ...item, category: 'chikora' } : item))
@@ -457,6 +468,7 @@ export const MenuProvider = ({ children }) => {
   };
 
   const updateRestaurantInfo = async (newInfo) => {
+    localStorage.setItem('chikora_has_custom_data', 'true');
     setRestaurantInfo(newInfo);
     try {
       await fetch('/api/settings', {
@@ -471,6 +483,7 @@ export const MenuProvider = ({ children }) => {
 
   // Reset to Defaults
   const resetToDefaults = async () => {
+    localStorage.removeItem('chikora_has_custom_data');
     setItems(DEFAULT_ITEMS);
     setCategories(DEFAULT_CATEGORIES);
     setRestaurantInfo(RESTAURANT_INFO);
