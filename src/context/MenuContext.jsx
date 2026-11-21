@@ -27,13 +27,13 @@ export const MenuProvider = ({ children }) => {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return [...parsed].sort((a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0));
         }
       }
     } catch (e) {
       console.error('Failed to load categories:', e);
     }
-    return DEFAULT_CATEGORIES;
+    return [...DEFAULT_CATEGORIES].sort((a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0));
   });
 
   // Restaurant details
@@ -305,7 +305,7 @@ export const MenuProvider = ({ children }) => {
               setItems(data.items);
             }
             if (data.categories && data.categories.length > 0) {
-              setCategories(data.categories);
+              setCategories([...data.categories].sort((a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0)));
             }
             if (data.restaurantInfo && Object.keys(data.restaurantInfo).length > 0) {
               setRestaurantInfo(data.restaurantInfo);
@@ -408,8 +408,14 @@ export const MenuProvider = ({ children }) => {
       nameKu: categoryData.nameKu || categoryData.nameEn,
       nameAr: categoryData.nameAr || categoryData.nameEn,
       icon: categoryData.icon || 'Flame',
+      sortOrder: categoryData.sortOrder !== undefined && categoryData.sortOrder !== ''
+        ? Number(categoryData.sortOrder)
+        : (categories.length > 0 ? Math.max(...categories.map((c) => Number(c.sortOrder) || 0)) + 1 : 1),
     };
-    setCategories((prev) => [...prev, newCat]);
+    setCategories((prev) => {
+      const updated = [...prev, newCat];
+      return updated.sort((a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0));
+    });
 
     try {
       await fetch('/api/categories', {
@@ -424,8 +430,8 @@ export const MenuProvider = ({ children }) => {
 
   const updateCategory = async (catId, categoryData) => {
     localStorage.setItem('chikora_has_custom_data', 'true');
-    setCategories((prev) =>
-      prev.map((c) =>
+    setCategories((prev) => {
+      const updated = prev.map((c) =>
         c.id === catId
           ? {
               ...c,
@@ -433,10 +439,14 @@ export const MenuProvider = ({ children }) => {
               nameKu: categoryData.nameKu !== undefined ? categoryData.nameKu : c.nameKu,
               nameAr: categoryData.nameAr !== undefined ? categoryData.nameAr : c.nameAr,
               icon: categoryData.icon !== undefined ? categoryData.icon : c.icon,
+              sortOrder: categoryData.sortOrder !== undefined && categoryData.sortOrder !== ''
+                ? Number(categoryData.sortOrder)
+                : (c.sortOrder ?? 0),
             }
           : c
-      )
-    );
+      );
+      return updated.sort((a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0));
+    });
 
     try {
       await fetch(`/api/categories/${catId}`, {

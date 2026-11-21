@@ -35,11 +35,15 @@ export const CategoryBar = () => {
   const isKu = lang === 'ku';
   const isAr = lang === 'ar';
 
+  const sortedCategories = [...categories].sort(
+    (a, b) => (Number(a.sortOrder) || 0) - (Number(b.sortOrder) || 0)
+  );
+
   return (
     <nav className="sticky top-16 sm:top-20 z-30 bg-[#0e0708]/95 backdrop-blur-xl border-b border-[#291318] py-2.5 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 scroll-smooth">
-          {categories.map((cat) => {
+          {sortedCategories.map((cat) => {
             const isActive = activeCategory === cat.id;
             const IconComponent = iconMap[cat.icon] || Flame;
             
