@@ -8,9 +8,6 @@ import {
   Image as ImageIcon,
   Search,
   Lock,
-  RefreshCw,
-  Download,
-  UploadCloud,
   Layers,
   Settings,
   AlertCircle,
@@ -83,10 +80,7 @@ export const AdminPanel = () => {
     addCategory,
     updateCategory,
     deleteCategory,
-    resetToDefaults,
     formatPrice,
-    exportData,
-    importData,
     lang,
     navigate,
     isDbConnected,
@@ -722,7 +716,7 @@ export const AdminPanel = () => {
           }`}
         >
           <Settings className="w-3.5 h-3.5" />
-          <span>{isKu ? 'ڕێکخستن و ئاسایش' : 'Settings & Security'}</span>
+          <span>{isKu ? 'ڕێکخستن' : isAr ? 'الإعدادات' : 'Settings'}</span>
         </button>
       </div>
 
@@ -1076,169 +1070,111 @@ export const AdminPanel = () => {
         </div>
       )}
 
-      {/* TAB 3: SETTINGS & BACKUP */}
+      {/* TAB 3: SETTINGS */}
       {adminTab === 'settings' && (
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-          
-          {/* Restaurant Details Form */}
-          <div className="md:col-span-7 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
-            <h3 className="text-sm font-bold text-white">
-              {isKu ? 'زانیارییەکانی ڕێستۆرانت' : 'Restaurant & Order Information'}
-            </h3>
+        <div className="max-w-3xl bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
+          <h3 className="text-sm font-bold text-white">
+            {isKu ? 'زانیارییەکانی ڕێستۆرانت' : 'Restaurant & Order Information'}
+          </h3>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  Restaurant Name (EN):
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.name}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, name: e.target.value })}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
-                  ناوی ڕێستۆرانت (کوردی):
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.nameKu}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameKu: e.target.value })}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
-                  اسم المطعم (العربية):
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.nameAr || ''}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameAr: e.target.value })}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  WhatsApp Number:
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.whatsapp}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, whatsapp: e.target.value })}
-                  placeholder="9647506008620"
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  Phone Display:
-                </label>
-                <input
-                  type="text"
-                  dir="ltr"
-                  value={restaurantInfo.phone}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, phone: e.target.value })}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  Currency Symbol:
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.currency}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, currency: e.target.value })}
-                  placeholder="IQD or $"
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  Hawler Address:
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.address}
-                  onChange={(e) => setRestaurantInfo({ ...restaurantInfo, address: e.target.value })}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
+                Restaurant Name (EN):
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.name}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, name: e.target.value })}
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
             </div>
 
-            <button
-              onClick={() => {
-                updateRestaurantInfo(restaurantInfo);
-                showToast(isAr ? 'تم حفظ التعديلات!' : isKu ? 'گۆڕانکارییەکان پاشەکەوتکران' : 'Settings saved to database!');
-              }}
-              className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs"
-            >
-              {isKu ? 'پاشەکەوتکردن' : 'Save Details'}
-            </button>
-          </div>
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                ناوی ڕێستۆرانت (کوردی):
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.nameKu}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameKu: e.target.value })}
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
+            </div>
 
-          {/* Backup & Export */}
-          <div className="md:col-span-5 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
-            <h3 className="text-sm font-bold text-white">
-              {isKu ? 'پاراستن و باکئەپی داتا' : 'Data Backup & Reset'}
-            </h3>
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                اسم المطعم (العربية):
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.nameAr || ''}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, nameAr: e.target.value })}
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
+            </div>
 
-            <div className="space-y-3">
-              <button
-                onClick={exportData}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-white/[0.08] text-xs font-semibold transition-all"
-              >
-                <Download className="w-3.5 h-3.5 text-amber-400" />
-                <span>{isKu ? 'داگرتنی باکئەپ (JSON)' : 'Export Backup File (JSON)'}</span>
-              </button>
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
+                WhatsApp Number:
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.whatsapp}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, whatsapp: e.target.value })}
+                placeholder="9647506008620"
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
+            </div>
 
-              <div>
-                <label className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-zinc-800 text-zinc-200 border border-white/[0.08] text-xs font-semibold cursor-pointer transition-all">
-                  <UploadCloud className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>{isKu ? 'هاوردەکردنی باکئەپ' : 'Import Menu Backup'}</span>
-                  <input
-                    type="file"
-                    accept=".json"
-                    className="hidden"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (!file) return;
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        const ok = importData(event.target.result);
-                        if (ok) showToast(isKu ? 'داتاکە هاوردەکرا!' : 'Menu data restored!');
-                      };
-                      reader.readAsText(file);
-                    }}
-                  />
-                </label>
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
+                Phone Display:
+              </label>
+              <input
+                type="text"
+                dir="ltr"
+                value={restaurantInfo.phone}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, phone: e.target.value })}
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
+            </div>
 
-              <div className="pt-3 border-t border-white/[0.06]">
-                <button
-                  onClick={() => {
-                    if (window.confirm(isKu ? 'دڵنیایت لە گەڕانەوە بۆ مێنیوی سەرەتایی چیکۆرا؟' : 'Are you sure you want to restore default items?')) {
-                      resetToDefaults();
-                      showToast(isKu ? 'مێنیو گەڕایەوە باری سەرەتایی' : 'Restored to default Chikora menu!');
-                    }
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-zinc-950 hover:bg-red-950/60 text-zinc-400 hover:text-red-300 border border-white/[0.08] text-xs font-semibold transition-all"
-                >
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span>{isKu ? 'گەڕانەوە بۆ باری سەرەتایی' : 'Reset To Original Factory Menu'}</span>
-                </button>
-              </div>
+            <div>
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
+                Currency Symbol:
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.currency}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, currency: e.target.value })}
+                placeholder="IQD or $"
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-zinc-300 mb-1">
+                Hawler Address:
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.address}
+                onChange={(e) => setRestaurantInfo({ ...restaurantInfo, address: e.target.value })}
+                className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+              />
             </div>
           </div>
+
+          <button
+            onClick={() => {
+              updateRestaurantInfo(restaurantInfo);
+              showToast(isAr ? 'تم حفظ التعديلات!' : isKu ? 'گۆڕانکارییەکان پاشەکەوتکران' : 'Settings saved to database!');
+            }}
+            className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs"
+          >
+            {isKu ? 'پاشەکەوتکردن' : 'Save Details'}
+          </button>
         </div>
       )}
 
