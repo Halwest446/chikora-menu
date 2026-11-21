@@ -46,15 +46,15 @@ export const Footer = () => {
               <MapPin className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
               <span>{isAr ? restaurantInfo.addressAr : isKu ? restaurantInfo.addressKu : restaurantInfo.address}</span>
             </div>
-            <div className="flex items-center gap-2 text-xs" dir="ltr">
+            <div className="flex items-center gap-2 text-xs">
               <Phone className="w-4 h-4 text-amber-400 flex-shrink-0" />
-              <a href={`tel:${restaurantInfo.phone}`} className="hover:text-white transition-colors font-sans">
-                <bdi dir="ltr">{restaurantInfo.phone}</bdi>
+              <a href={`tel:${restaurantInfo.phone}`} className="hover:text-white transition-colors font-sans" dir="ltr">
+                {restaurantInfo.phone}
               </a>
             </div>
             <div className="flex items-center gap-2 text-xs">
               <InstagramIcon className="w-4 h-4 text-pink-400 flex-shrink-0" />
-              <span className="text-zinc-300">{restaurantInfo.instagram}</span>
+              <span className="text-zinc-300" dir="ltr">{restaurantInfo.instagram}</span>
             </div>
           </div>
 
