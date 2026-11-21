@@ -58,9 +58,13 @@ export const ItemModal = () => {
         {/* Modal Header Image */}
         <div className="relative aspect-[16/10] w-full bg-[#241014] flex-shrink-0">
           <img
-            src={item.image}
+            src={item.image || '/chikora-logo.jpeg'}
             alt={item.name}
             className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = '/chikora-logo.jpeg';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#190c0f] via-transparent to-black/30" />
           

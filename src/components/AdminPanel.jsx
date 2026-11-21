@@ -51,8 +51,7 @@ export const AdminPanel = () => {
     isAdminAuthenticated,
     adminUser,
     loginAdmin,
-    logoutAdmin,
-    changeAdminPassword
+    logoutAdmin
   } = useMenu();
 
   const isKu = lang === 'ku';
@@ -64,14 +63,6 @@ export const AdminPanel = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
-
-  // Security / Password Change State
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newAdminUsername, setNewAdminUsername] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [securityLoading, setSecurityLoading] = useState(false);
-  const [securityMessage, setSecurityMessage] = useState({ type: '', text: '' });
 
   // Active Admin Tab: 'items' | 'categories' | 'settings'
   const [adminTab, setAdminTab] = useState('items');
@@ -139,51 +130,6 @@ export const AdminPanel = () => {
       showToast(isAr ? 'تم تسجيل الدخول بنجاح!' : isKu ? 'بەخێربێیت بۆ پانێڵی بەڕێوەبردن' : 'Welcome to Admin Panel');
     } else {
       setLoginError(res.error || (isKu ? 'ناوی بەکارهێنەر یان وشەی نهێنی هەڵەیە' : 'Invalid credentials'));
-    }
-  };
-
-  // Change Password handler
-  const handleChangePasswordSubmit = async (e) => {
-    e.preventDefault();
-    setSecurityMessage({ type: '', text: '' });
-
-    if (!currentPassword) {
-      setSecurityMessage({
-        type: 'error',
-        text: isAr ? 'يرجى إدخال كلمة المرور الحالية' : isKu ? 'تکایە وشەی نهێنی ئێستات بنووسە' : 'Current password is required.'
-      });
-      return;
-    }
-    if (!newPassword || newPassword.length < 6) {
-      setSecurityMessage({
-        type: 'error',
-        text: isAr ? 'يجب أن تتكون كلمة المرور الجديدة من 6 أحرف على الأقل' : isKu ? 'وشەی نهێنی نوێ دەبێت لانیکەم ٦ پیت بێت' : 'New password must be at least 6 characters.'
-      });
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setSecurityMessage({
-        type: 'error',
-        text: isAr ? 'كلمتا المرور غير متطابقتين!' : isKu ? 'وشە نهێنییە نوێیەکان وەک یەک نین!' : 'New passwords do not match!'
-      });
-      return;
-    }
-
-    setSecurityLoading(true);
-    const res = await changeAdminPassword(currentPassword, newAdminUsername, newPassword);
-    setSecurityLoading(false);
-
-    if (res.success) {
-      setSecurityMessage({
-        type: 'success',
-        text: isAr ? 'تم تحديث بيانات الدخول بنجاح!' : isKu ? 'وشەی نهێنی و ناوی بەکارهێنەر بەسەرکەوتوویی نوێکرانەوە!' : 'Credentials updated successfully!'
-      });
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      showToast(isKu ? 'ئاسایشی ئەکاونت نوێکرایەوە' : 'Security settings updated');
-    } else {
-      setSecurityMessage({ type: 'error', text: res.error || 'Failed to update credentials' });
     }
   };
 
@@ -1144,111 +1090,6 @@ export const AdminPanel = () => {
                 </button>
               </div>
             </div>
-          </div>
-
-          {/* Admin Security & Password Change */}
-          <div className="md:col-span-12 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-amber-400" />
-                <h3 className="text-sm font-bold text-white">
-                  {isAr ? 'أمان الحساب وتغيير كلمة المرور' : isKu ? 'ئاسایشی ئەکاونت و گۆڕینی وشەی نهێنی' : 'Account Security & Password Management'}
-                </h3>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-md font-semibold">
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span>{isKu ? 'پارێزراوە لە هاک' : 'Protected'}</span>
-              </span>
-            </div>
-
-            {securityMessage.text && (
-              <div className={`p-3 rounded-lg border text-xs flex items-center gap-2 ${
-                securityMessage.type === 'success'
-                  ? 'bg-emerald-950/60 border-emerald-800/40 text-emerald-300'
-                  : 'bg-red-950/60 border-red-800/40 text-red-300'
-              }`}>
-                {securityMessage.type === 'success' ? (
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                ) : (
-                  <AlertCircle className="w-3.5 h-3.5 text-red-400 flex-shrink-0" />
-                )}
-                <span>{securityMessage.text}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleChangePasswordSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  {isAr ? 'كلمة المرور الحالية:' : isKu ? 'وشەی نهێنی ئێستا:' : 'Current Password:'}
-                </label>
-                <input
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  {isAr ? 'اسم المستخدم الجديد:' : isKu ? 'ناوی نوێ:' : 'New Username (Optional):'}
-                </label>
-                <input
-                  type="text"
-                  value={newAdminUsername}
-                  onChange={(e) => setNewAdminUsername(e.target.value)}
-                  placeholder={adminUser?.username || 'admin'}
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  {isAr ? 'كلمة المرور الجديدة (6+):' : isKu ? 'وشەی نهێنی نوێ (٦+):' : 'New Password (6+ chars):'}
-                </label>
-                <input
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  {isAr ? 'تأكيد كلمة المرور:' : isKu ? 'دووبارەکردنەوە:' : 'Confirm New Password:'}
-                </label>
-                <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
-                />
-              </div>
-
-              <div className="lg:col-span-4 flex justify-end">
-                <button
-                  type="submit"
-                  disabled={securityLoading}
-                  className="py-2 px-4 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white font-semibold text-xs border border-white/[0.1] disabled:opacity-50 transition-all flex items-center justify-center gap-1.5"
-                >
-                  {securityLoading ? (
-                    <>
-                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                      <span>{isKu ? 'نوێکردنەوە...' : 'Updating...'}</span>
-                    </>
-                  ) : (
-                    <>
-                      <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                      <span>{isAr ? 'تحديث بيانات الحساب' : isKu ? 'نوێکردنەوەی ئەکاونت' : 'Update Credentials'}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}

@@ -32,7 +32,7 @@ export const MenuCard = ({ item }) => {
         className="relative aspect-[16/11] w-full overflow-hidden cursor-pointer bg-[#241014]"
       >
         <img
-          src={item.image || 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80'}
+          src={item.image || '/chikora-logo.jpeg'}
           alt={item.name}
           loading="lazy"
           className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
@@ -40,7 +40,7 @@ export const MenuCard = ({ item }) => {
           }`}
           onError={(e) => {
             e.target.onerror = null;
-            e.target.src = 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=800&q=80';
+            e.target.src = '/chikora-logo.jpeg';
           }}
         />
 
