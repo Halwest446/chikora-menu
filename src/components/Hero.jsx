@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { MapPin, Clock, Phone, Sparkles, Award } from 'lucide-react';
+import { MapPin, Clock, Phone, Sparkles, Award, Flame } from 'lucide-react';
 
 export const Hero = () => {
   const { lang, restaurantInfo } = useMenu();
