@@ -628,8 +628,15 @@ if (fs.existsSync(distDir)) {
 // Start Server after DB Init
 initDb()
   .then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
+    const server = app.listen(PORT, '0.0.0.0', () => {
       console.log(`🚀 Chikora Secure Database API running on http://localhost:${PORT}`);
+    });
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error(`⚠️ Port ${PORT} is already in use by another process.`);
+      } else {
+        console.error('Server error:', err);
+      }
     });
   })
   .catch((err) => {
