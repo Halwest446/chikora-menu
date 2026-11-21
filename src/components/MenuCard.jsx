@@ -90,21 +90,31 @@ export const MenuCard = ({ item }) => {
         </div>
 
         {/* Footer: Price in Bold Gold & Detail Action */}
-        <div className="pt-3 border-t border-[#291318] flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-              {hasSizes
-                ? (isAr ? 'يبدأ من' : isKu ? 'دەستپێک لە' : 'Starts from')
-                : (isAr ? 'السعر' : isKu ? 'نرخ' : 'Price')}
-            </span>
-            <span className="text-base sm:text-lg font-black text-[#f5a623] tabular-nums tracking-tight">
-              {formatPrice(displayPrice)}
-            </span>
-          </div>
+        <div className="pt-3 border-t border-[#291318] flex items-center justify-between gap-2">
+          {hasSizes ? (
+            <div className="flex flex-col">
+              <span className="text-xs sm:text-sm font-black text-[#f5a623] leading-snug">
+                {isAr
+                  ? 'السعر يحدد حسب الحجم'
+                  : isKu
+                  ? 'نرخ بە پێ قەبارە دیاری دەکرێت'
+                  : 'Price based on size'}
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                {isAr ? 'السعر' : isKu ? 'نرخ' : 'Price'}
+              </span>
+              <span className="text-base sm:text-lg font-black text-[#f5a623] tabular-nums tracking-tight">
+                {formatPrice(item.price)}
+              </span>
+            </div>
+          )}
 
           <button
             onClick={() => setSelectedItemForModal(item)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#241014] hover:bg-[#34161c] text-[#f5a623] border border-[#441c24] hover:border-[#f5a623]/60 transition-all duration-200"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-[#241014] hover:bg-[#34161c] text-[#f5a623] border border-[#441c24] hover:border-[#f5a623]/60 transition-all duration-200 flex-shrink-0"
           >
             <Eye className="w-3.5 h-3.5 text-[#f5a623]" />
             <span>{isAr ? 'التفاصيل' : isKu ? 'وردەکاری' : 'Details'}</span>
