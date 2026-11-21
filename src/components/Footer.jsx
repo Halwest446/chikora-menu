@@ -16,7 +16,7 @@ export const Footer = () => {
   return (
     <footer className="bg-zinc-950 border-t border-white/[0.08] text-zinc-400 text-xs py-12 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           
           {/* Col 1: Brand */}
           <div className="space-y-3 md:col-span-1">
@@ -35,13 +35,6 @@ export const Footer = () => {
                 </p>
               </div>
             </div>
-            <p className="text-zinc-400 text-xs leading-relaxed font-normal">
-              {isAr
-                ? 'أعلى معايير الجودة وألذ دجاج مقلي كرسبي بخلطتنا الحصرية في مدينة أربيل.'
-                : isKu
-                ? 'باشترین کوالێتی و ناسکترین مریشکی کریسپی بە بەهاراتی نهێنی چیکۆرا لە شاری هەولێر.'
-                : 'Premium secret-marinated ultra-crispy fried chicken and fast food in Erbil, Kurdistan.'}
-            </p>
           </div>
 
           {/* Col 2: Location & Contact */}
@@ -81,20 +74,6 @@ export const Footer = () => {
                 </p>
               </div>
             </div>
-          </div>
-
-          {/* Col 4: Quality Commitment */}
-          <div className="space-y-2.5">
-            <h4 className="text-white font-semibold text-xs tracking-wider uppercase">
-              {isAr ? 'معايير الجودة' : isKu ? 'تایبەتمەندی چیکۆرا' : 'The Chikora Standard'}
-            </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed font-normal">
-              {isAr
-                ? 'دجاج طازج 100% يومياً، مقلي بعناية لقرمشة ذهبية مثالية.'
-                : isKu
-                ? 'مریشکی ١٠٠٪ فرێشی ڕۆژانە بە تێکەڵەی بەهاراتی نهێنی، برژاوی زێڕین و کریسپی بێ وێنە.'
-                : '100% fresh chicken fried to crispy golden perfection with our proprietary secret recipe.'}
-            </p>
           </div>
 
         </div>
