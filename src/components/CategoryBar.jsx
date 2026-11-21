@@ -6,20 +6,28 @@ import {
   Sandwich, 
   Sparkles, 
   UtensilsCrossed, 
+  Utensils,
   Salad, 
   Coffee,
-  Layers
+  Layers,
+  Pizza,
+  Soup,
+  IceCream
 } from 'lucide-react';
 
 const iconMap = {
-  Flame: Flame,
-  Drumstick: Drumstick,
-  Sandwich: Sandwich,
-  Sparkles: Sparkles,
-  UtensilsCrossed: UtensilsCrossed,
-  Salad: Salad,
-  Coffee: Coffee,
-  Layers: Layers
+  Flame,
+  Drumstick,
+  Sandwich,
+  Sparkles,
+  UtensilsCrossed,
+  Utensils,
+  Salad,
+  Coffee,
+  Layers,
+  Pizza,
+  Soup,
+  IceCream
 };
 
 export const CategoryBar = () => {

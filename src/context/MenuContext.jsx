@@ -413,6 +413,32 @@ export const MenuProvider = ({ children }) => {
     }
   };
 
+  const updateCategory = async (catId, categoryData) => {
+    setCategories((prev) =>
+      prev.map((c) =>
+        c.id === catId
+          ? {
+              ...c,
+              nameEn: categoryData.nameEn !== undefined ? categoryData.nameEn : c.nameEn,
+              nameKu: categoryData.nameKu !== undefined ? categoryData.nameKu : c.nameKu,
+              nameAr: categoryData.nameAr !== undefined ? categoryData.nameAr : c.nameAr,
+              icon: categoryData.icon !== undefined ? categoryData.icon : c.icon,
+            }
+          : c
+      )
+    );
+
+    try {
+      await fetch(`/api/categories/${catId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+        body: JSON.stringify(categoryData),
+      });
+    } catch (err) {
+      console.error('Failed to update category in SQLite database:', err);
+    }
+  };
+
   const deleteCategory = async (catId) => {
     if (catId === 'all') return;
     setCategories((prev) => prev.filter((c) => c.id !== catId));
@@ -598,6 +624,7 @@ export const MenuProvider = ({ children }) => {
         deleteItem,
         toggleStock,
         addCategory,
+        updateCategory,
         deleteCategory,
         resetToDefaults,
         addToCart,

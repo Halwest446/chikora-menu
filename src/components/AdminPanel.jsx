@@ -25,8 +25,49 @@ import {
   EyeOff,
   LogOut,
   X,
-  Check
+  Check,
+  Pencil,
+  Drumstick,
+  Sandwich,
+  Pizza,
+  Soup,
+  UtensilsCrossed,
+  Utensils,
+  Salad,
+  Coffee,
+  Sparkles,
+  IceCream
 } from 'lucide-react';
+
+const categoryIconOptions = [
+  { value: 'Flame', labelEn: 'Flame (Spicy / Grilled)', labelKu: 'ئاگر (تیژ / برژاو)', Icon: Flame },
+  { value: 'Drumstick', labelEn: 'Drumstick (Chicken / Chikora)', labelKu: 'ڕانی مریشک (چیکۆرا)', Icon: Drumstick },
+  { value: 'Sandwich', labelEn: 'Burger / Sandwich', labelKu: 'بەرگەر و لەفاف', Icon: Sandwich },
+  { value: 'Pizza', labelEn: 'Pizza', labelKu: 'پیتزا', Icon: Pizza },
+  { value: 'Soup', labelEn: 'Soup / Stew', labelKu: 'شۆربا و شلە', Icon: Soup },
+  { value: 'UtensilsCrossed', labelEn: 'Loaded Fries / Meals', labelKu: 'پەتاتە و ژەمەکان', Icon: UtensilsCrossed },
+  { value: 'Utensils', labelEn: 'Main Dishes', labelKu: 'خواردنە سەرەکییەکان', Icon: Utensils },
+  { value: 'Salad', labelEn: 'Salad & Sauces', labelKu: 'زەڵاتە و سۆس', Icon: Salad },
+  { value: 'Coffee', labelEn: 'Beverages / Drinks', labelKu: 'خواردنەوەکان', Icon: Coffee },
+  { value: 'IceCream', labelEn: 'Desserts & Sweets', labelKu: 'شیرینی و دۆندرمە', Icon: IceCream },
+  { value: 'Sparkles', labelEn: 'Special / Signature', labelKu: 'تایبەتی ڕێستۆرانت', Icon: Sparkles },
+  { value: 'Layers', labelEn: 'Sides / Extras', labelKu: 'بەشەکان و لایەنی', Icon: Layers },
+];
+
+const categoryIconMap = {
+  Flame,
+  Drumstick,
+  Sandwich,
+  Pizza,
+  Soup,
+  UtensilsCrossed,
+  Utensils,
+  Salad,
+  Coffee,
+  IceCream,
+  Sparkles,
+  Layers,
+};
 
 export const AdminPanel = () => {
   const {
@@ -40,6 +81,7 @@ export const AdminPanel = () => {
     deleteItem,
     toggleStock,
     addCategory,
+    updateCategory,
     deleteCategory,
     resetToDefaults,
     formatPrice,
@@ -97,6 +139,14 @@ export const AdminPanel = () => {
   const [newCatNameKu, setNewCatNameKu] = useState('');
   const [newCatNameAr, setNewCatNameAr] = useState('');
   const [newCatIcon, setNewCatIcon] = useState('Flame');
+
+  // Category Edit State & Modal
+  const [editingCategory, setEditingCategory] = useState(null);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [editCatNameEn, setEditCatNameEn] = useState('');
+  const [editCatNameKu, setEditCatNameKu] = useState('');
+  const [editCatNameAr, setEditCatNameAr] = useState('');
+  const [editCatIcon, setEditCatIcon] = useState('Flame');
 
   // Delete Confirm Modal
   const [itemToDelete, setItemToDelete] = useState(null);
@@ -351,6 +401,33 @@ export const AdminPanel = () => {
     setNewCatNameKu('');
     setNewCatNameAr('');
     showToast(isAr ? 'تمت إضافة القسم بنجاح!' : isKu ? 'پۆلی نوێ زیادکرا!' : 'Category added successfully!');
+  };
+
+  // Open modal to edit existing category
+  const handleOpenEditCategory = (cat) => {
+    setEditingCategory(cat);
+    setEditCatNameEn(cat.nameEn || '');
+    setEditCatNameKu(cat.nameKu || '');
+    setEditCatNameAr(cat.nameAr || '');
+    setEditCatIcon(cat.icon || 'Flame');
+    setIsCategoryModalOpen(true);
+  };
+
+  // Handle Category Update
+  const handleUpdateCategorySubmit = (e) => {
+    e.preventDefault();
+    if (!editingCategory || !editCatNameEn.trim()) return;
+
+    updateCategory(editingCategory.id, {
+      nameEn: editCatNameEn.trim(),
+      nameKu: editCatNameKu.trim() || editCatNameEn.trim(),
+      nameAr: editCatNameAr.trim() || editCatNameKu.trim() || editCatNameEn.trim(),
+      icon: editCatIcon,
+    });
+
+    setIsCategoryModalOpen(false);
+    setEditingCategory(null);
+    showToast(isAr ? 'تم تحديث القسم بنجاح!' : isKu ? 'پۆلەکە بە سەرکەوتوویی نوێکرایەوە!' : 'Category updated successfully!');
   };
 
   // Filtered items in admin
@@ -858,21 +935,29 @@ export const AdminPanel = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-zinc-300 mb-1">
-                  Category Icon:
+                <label className="block text-xs font-medium text-zinc-300 mb-1 flex items-center justify-between">
+                  <span>Category Icon:</span>
+                  <span className="text-[11px] text-amber-400 flex items-center gap-1 font-semibold">
+                    {(() => {
+                      const SelectedIcon = categoryIconMap[newCatIcon] || Flame;
+                      return (
+                        <>
+                          Preview: <SelectedIcon className="w-3.5 h-3.5 inline text-amber-400" />
+                        </>
+                      );
+                    })()}
+                  </span>
                 </label>
                 <select
                   value={newCatIcon}
                   onChange={(e) => setNewCatIcon(e.target.value)}
                   className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
                 >
-                  <option value="Flame">Flame (ئاگر)</option>
-                  <option value="Drumstick">Drumstick (ڕانی مریشک)</option>
-                  <option value="Sandwich">Burger / Sandwich (بەرگەر)</option>
-                  <option value="Sparkles">Sparkles (تایبەت)</option>
-                  <option value="UtensilsCrossed">Loaded Fries (پەتاتە)</option>
-                  <option value="Salad">Sauces / Salad (سۆس)</option>
-                  <option value="Coffee">Beverage / Drinks (خواردنەوە)</option>
+                  {categoryIconOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.value} - {isKu ? opt.labelKu : opt.labelEn}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -887,39 +972,72 @@ export const AdminPanel = () => {
 
           {/* Existing Categories List */}
           <div className="md:col-span-7 bg-zinc-900/60 border border-white/[0.08] rounded-xl p-5 space-y-3">
-            <h3 className="text-sm font-bold text-white">
-              {isKu ? 'پۆلە بەردەستەکان' : 'Active Categories'}
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-white">
+                {isKu ? 'پۆلە بەردەستەکان' : 'Active Categories'}
+              </h3>
+              <span className="text-xs text-zinc-500 font-medium">
+                {categories.length} {isKu ? 'پۆل' : 'categories'}
+              </span>
+            </div>
 
             <div className="space-y-2">
               {categories.map((c) => {
-                const count = items.filter((i) => i.category === c.id).length;
+                const count = c.id === 'all'
+                  ? items.length
+                  : items.filter((i) => i.category === c.id).length;
+                const IconComp = categoryIconMap[c.icon] || Flame;
                 return (
                   <div
                     key={c.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-zinc-950 border border-white/[0.06]"
+                    className="flex items-center justify-between p-3 rounded-xl bg-zinc-950 border border-white/[0.06] hover:border-white/15 transition-all gap-3"
                   >
-                    <div>
-                      <p className="font-semibold text-white text-xs sm:text-sm">
-                        {c.nameEn}
-                        <span className="text-xs text-amber-400 ml-2 font-normal">
-                          ({c.nameKu})
-                        </span>
-                      </p>
-                      <p className="text-[10px] text-zinc-500 mt-0.5">
-                        ID: {c.id} • {count} {isKu ? 'خواردن' : 'items'}
-                      </p>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0 text-amber-400 shadow-sm">
+                        <IconComp className="w-4 h-4" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-bold text-white text-xs sm:text-sm truncate">
+                            {c.nameEn}
+                          </p>
+                          <span className="text-xs text-amber-400 font-normal">
+                            ({c.nameKu || c.nameEn})
+                          </span>
+                          {c.nameAr && (
+                            <span className="text-xs text-zinc-400 font-normal hidden sm:inline">
+                              • {c.nameAr}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-zinc-500 mt-0.5">
+                          ID: <span className="font-mono text-zinc-400">{c.id}</span> • Icon: <span className="text-amber-400 font-medium">{c.icon || 'Flame'}</span> • {count} {isKu ? 'خواردن' : 'items'}
+                        </p>
+                      </div>
                     </div>
 
-                    {c.id !== 'all' && (
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
                       <button
-                        onClick={() => deleteCategory(c.id)}
-                        className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-900 transition-colors"
-                        title="Delete Category"
+                        type="button"
+                        onClick={() => handleOpenEditCategory(c)}
+                        className="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-zinc-900 hover:bg-amber-500/10 text-zinc-300 hover:text-amber-400 border border-white/[0.08] hover:border-amber-500/30 transition-all flex items-center gap-1.5 active:scale-95"
+                        title={isKu ? 'دەستکاریکردنی پۆل و ئایکۆن' : 'Edit Category & Icon'}
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <Pencil className="w-3.5 h-3.5 text-amber-400" />
+                        <span>{isKu ? 'دەستکاری' : isAr ? 'تعديل' : 'Edit'}</span>
                       </button>
-                    )}
+
+                      {c.id !== 'all' && (
+                        <button
+                          type="button"
+                          onClick={() => deleteCategory(c.id)}
+                          className="p-1.5 rounded-lg text-zinc-500 hover:text-red-400 hover:bg-red-950/30 border border-transparent hover:border-red-800/30 transition-colors"
+                          title="Delete Category"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -1494,6 +1612,146 @@ export const AdminPanel = () => {
                   className="px-5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-bold transition-all"
                 >
                   {editingItem ? (isKu ? 'نوێکردنەوە' : 'Update') : (isKu ? 'زیادکردن' : 'Add Item')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT CATEGORY MODAL */}
+      {isCategoryModalOpen && editingCategory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="w-full max-w-md bg-zinc-900 border border-white/[0.1] rounded-2xl overflow-hidden shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] bg-zinc-950/70">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                  <Pencil className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-white">
+                    {isKu ? 'دەستکاریکردنی پۆل' : isAr ? 'تعديل القسم' : 'Edit Category'}
+                  </h3>
+                  <p className="text-[10px] text-zinc-500 font-mono">
+                    ID: {editingCategory.id}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCategoryModalOpen(false);
+                  setEditingCategory(null);
+                }}
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Form */}
+            <form onSubmit={handleUpdateCategorySubmit} className="p-5 space-y-3.5">
+              <div>
+                <label className="block text-xs font-medium text-zinc-300 mb-1">
+                  Category Name (English):
+                </label>
+                <input
+                  type="text"
+                  value={editCatNameEn}
+                  onChange={(e) => setEditCatNameEn(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                  ناوی پۆل (کوردی):
+                </label>
+                <input
+                  type="text"
+                  value={editCatNameKu}
+                  onChange={(e) => setEditCatNameKu(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-zinc-300 mb-1 font-kurdish">
+                  اسم القسم (العربية):
+                </label>
+                <input
+                  type="text"
+                  value={editCatNameAr}
+                  onChange={(e) => setEditCatNameAr(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-medium text-zinc-300 mb-1 flex items-center justify-between">
+                  <span>Category Icon:</span>
+                  <span className="text-[11px] text-amber-400 flex items-center gap-1 font-semibold">
+                    {(() => {
+                      const SelectedIcon = categoryIconMap[editCatIcon] || Flame;
+                      return (
+                        <>
+                          Preview: <SelectedIcon className="w-3.5 h-3.5 inline text-amber-400" />
+                        </>
+                      );
+                    })()}
+                  </span>
+                </label>
+                <select
+                  value={editCatIcon}
+                  onChange={(e) => setEditCatIcon(e.target.value)}
+                  className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                >
+                  {categoryIconOptions.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.value} - {isKu ? opt.labelKu : opt.labelEn}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Live Menu Tab Preview */}
+              <div className="p-3 rounded-xl bg-zinc-950 border border-white/[0.06] space-y-1.5">
+                <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-semibold">
+                  {isKu ? 'پێشبینینی شێوازی لە مێنیو' : 'Live Menu Tab Preview'}:
+                </span>
+                <div className="flex items-center gap-2">
+                  <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-[#ba181b] to-[#c2410c] text-white border border-[#f5a623] shadow-md">
+                    {(() => {
+                      const PreviewIcon = categoryIconMap[editCatIcon] || Flame;
+                      return <PreviewIcon className="w-3.5 h-3.5 text-[#ffd043]" />;
+                    })()}
+                    <span>{isKu ? (editCatNameKu || editCatNameEn) : (editCatNameEn || 'Category')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="pt-2 flex items-center justify-end gap-2 border-t border-white/[0.08]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsCategoryModalOpen(false);
+                    setEditingCategory(null);
+                  }}
+                  className="px-4 py-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold transition-colors"
+                >
+                  {isKu ? 'پاشگەزبوونەوە' : 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-zinc-950 text-xs font-bold transition-all active:scale-98 flex items-center gap-1.5"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>{isKu ? 'پاشەکەوتکردنی گۆڕانکارییەکان' : 'Save Changes'}</span>
                 </button>
               </div>
             </form>

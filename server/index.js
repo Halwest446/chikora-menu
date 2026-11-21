@@ -484,6 +484,28 @@ app.post('/api/categories', requireAdminAuth, async (req, res) => {
   }
 });
 
+// PUT Update Category
+app.put('/api/categories/:id', requireAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nameEn, nameKu, nameAr, icon, sortOrder } = req.body;
+    await runQuery(
+      `UPDATE categories SET
+        nameEn = COALESCE(?, nameEn),
+        nameKu = COALESCE(?, nameKu),
+        nameAr = COALESCE(?, nameAr),
+        icon = COALESCE(?, icon),
+        sortOrder = COALESCE(?, sortOrder)
+      WHERE id = ?`,
+      [nameEn, nameKu, nameAr, icon, sortOrder, id]
+    );
+    const updated = await getQuery('SELECT * FROM categories WHERE id = ?', [id]);
+    res.json({ success: true, category: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 // DELETE Category
 app.delete('/api/categories/:id', requireAdminAuth, async (req, res) => {
   try {
