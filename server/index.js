@@ -67,13 +67,25 @@ const upload = multer({
   },
 });
 
-// Helper to convert SQLite integer to boolean
-const formatItem = (row) => ({
-  ...row,
-  isSpicy: Boolean(row.isSpicy),
-  inStock: Boolean(row.inStock),
-  price: Number(row.price),
-});
+// Helper to convert SQLite integer to boolean and parse sizes
+const formatItem = (row) => {
+  let sizes = [];
+  if (row.sizes) {
+    try {
+      sizes = typeof row.sizes === 'string' ? JSON.parse(row.sizes) : row.sizes;
+      if (!Array.isArray(sizes)) sizes = [];
+    } catch {
+      sizes = [];
+    }
+  }
+  return {
+    ...row,
+    isSpicy: Boolean(row.isSpicy),
+    inStock: Boolean(row.inStock),
+    price: Number(row.price),
+    sizes,
+  };
+};
 
 // RATE LIMITER FOR LOGIN (Max 5 attempts per 10 minutes per IP)
 const loginAttempts = new Map(); // ip -> { count, resetAt }
@@ -321,13 +333,15 @@ app.post('/api/items', requireAdminAuth, async (req, res) => {
       tag,
       isSpicy,
       inStock,
+      sizes,
     } = req.body;
 
     const id = req.body.id || `item-${Date.now()}`;
+    const serializedSizes = Array.isArray(sizes) ? JSON.stringify(sizes) : (typeof sizes === 'string' ? sizes : '[]');
     const sql = `
       INSERT INTO items (
-        id, name, nameKu, nameAr, category, price, image, description, descriptionKu, descriptionAr, tag, isSpicy, inStock
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        id, name, nameKu, nameAr, category, price, image, description, descriptionKu, descriptionAr, tag, isSpicy, inStock, sizes
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     await runQuery(sql, [
@@ -344,6 +358,7 @@ app.post('/api/items', requireAdminAuth, async (req, res) => {
       tag || '',
       isSpicy ? 1 : 0,
       inStock !== false ? 1 : 0,
+      serializedSizes,
     ]);
 
     const newItem = await getQuery('SELECT * FROM items WHERE id = ?', [id]);
@@ -371,8 +386,10 @@ app.put('/api/items/:id', requireAdminAuth, async (req, res) => {
       tag,
       isSpicy,
       inStock,
+      sizes,
     } = req.body;
 
+    const serializedSizes = Array.isArray(sizes) ? JSON.stringify(sizes) : (typeof sizes === 'string' ? sizes : '[]');
     const sql = `
       UPDATE items SET
         name = ?,
@@ -386,7 +403,8 @@ app.put('/api/items/:id', requireAdminAuth, async (req, res) => {
         descriptionAr = ?,
         tag = ?,
         isSpicy = ?,
-        inStock = ?
+        inStock = ?,
+        sizes = ?
       WHERE id = ?
     `;
 
@@ -403,6 +421,7 @@ app.put('/api/items/:id', requireAdminAuth, async (req, res) => {
       tag || '',
       isSpicy ? 1 : 0,
       inStock !== false ? 1 : 0,
+      serializedSizes,
       id,
     ]);
 
@@ -522,10 +541,13 @@ app.post('/api/sync', requireAdminAuth, async (req, res) => {
     if (Array.isArray(items) && items.length > 0) {
       await runQuery('DELETE FROM items');
       for (const item of items) {
+        const serializedSizes = Array.isArray(item.sizes)
+          ? JSON.stringify(item.sizes)
+          : (typeof item.sizes === 'string' ? item.sizes : '[]');
         await runQuery(
           `INSERT INTO items (
-            id, name, nameKu, nameAr, category, price, image, description, descriptionKu, descriptionAr, tag, isSpicy, inStock
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            id, name, nameKu, nameAr, category, price, image, description, descriptionKu, descriptionAr, tag, isSpicy, inStock, sizes
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           [
             item.id || `item-${Date.now()}-${Math.random()}`,
             item.name,
@@ -540,6 +562,7 @@ app.post('/api/sync', requireAdminAuth, async (req, res) => {
             item.tag || '',
             item.isSpicy ? 1 : 0,
             item.inStock !== false ? 1 : 0,
+            serializedSizes,
           ]
         );
       }

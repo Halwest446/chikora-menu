@@ -52,7 +52,9 @@ export const CartDrawer = () => {
 
     cart.forEach((ci, idx) => {
       const itemName = isKu ? (ci.item.nameKu || ci.item.name) : ci.item.name;
-      message += `${idx + 1}. ${itemName} x${ci.quantity} - ${formatPrice(ci.item.price * ci.quantity)}\n`;
+      const sizeLabel = ci.selectedSize ? ` (${ci.selectedSize.name})` : '';
+      const unitPrice = ci.selectedSize ? Number(ci.selectedSize.price) : Number(ci.item.price);
+      message += `${idx + 1}. ${itemName}${sizeLabel} x${ci.quantity} - ${formatPrice(unitPrice * ci.quantity)}\n`;
       if (ci.notes) {
         message += `   (تێبینی: ${ci.notes})\n`;
       }
@@ -147,9 +149,14 @@ export const CartDrawer = () => {
                     <div className="flex-1 min-w-0">
                       <h4 className="text-xs font-semibold text-white truncate">
                         {itemName}
+                        {ci.selectedSize && (
+                          <span className="text-amber-400 font-medium text-[11px] ltr:ml-1 rtl:mr-1">
+                            ({ci.selectedSize.name})
+                          </span>
+                        )}
                       </h4>
                       <p className="text-xs font-bold text-amber-400 tabular-nums mt-0.5">
-                        {formatPrice(ci.item.price * ci.quantity)}
+                        {formatPrice((ci.selectedSize ? ci.selectedSize.price : ci.item.price) * ci.quantity)}
                       </p>
                       {ci.notes && (
                         <p className="text-[10px] text-zinc-400 italic truncate mt-0.5">

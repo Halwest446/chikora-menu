@@ -442,17 +442,20 @@ export const MenuProvider = ({ children }) => {
   };
 
   // Cart Actions
-  const addToCart = (item, quantity = 1, notes = '') => {
+  const addToCart = (item, quantity = 1, notes = '', selectedSize = null) => {
     setCart((prev) => {
       const existingIdx = prev.findIndex(
-        (ci) => ci.item.id === item.id && ci.notes === notes
+        (ci) =>
+          ci.item.id === item.id &&
+          ci.notes === notes &&
+          (ci.selectedSize?.name || '') === (selectedSize?.name || '')
       );
       if (existingIdx > -1) {
         const next = [...prev];
         next[existingIdx].quantity += quantity;
         return next;
       }
-      return [...prev, { item, quantity, notes }];
+      return [...prev, { item, quantity, notes, selectedSize }];
     });
     setIsCartOpen(true);
   };
@@ -477,7 +480,10 @@ export const MenuProvider = ({ children }) => {
     setCart([]);
   };
 
-  const cartTotal = cart.reduce((acc, ci) => acc + ci.item.price * ci.quantity, 0);
+  const cartTotal = cart.reduce((acc, ci) => {
+    const unitPrice = ci.selectedSize ? Number(ci.selectedSize.price) : Number(ci.item.price);
+    return acc + (unitPrice || 0) * ci.quantity;
+  }, 0);
   const cartCount = cart.reduce((acc, ci) => acc + ci.quantity, 0);
 
   // Currency Formatter

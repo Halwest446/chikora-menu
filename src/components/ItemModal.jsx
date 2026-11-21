@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMenu } from '../context/MenuContext';
-import { X, Check, Flame, Star, Sparkles } from 'lucide-react';
+import { X, Check, Flame, Star, Sparkles, Layers, ShoppingBag } from 'lucide-react';
 
 export const ItemModal = () => {
-  const { selectedItemForModal, setSelectedItemForModal, lang, formatPrice } = useMenu();
+  const { selectedItemForModal, setSelectedItemForModal, lang, formatPrice, addToCart } = useMenu();
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
+
+  // Reset selected size whenever a different item is opened
+  useEffect(() => {
+    setSelectedSizeIndex(0);
+  }, [selectedItemForModal?.id]);
 
   if (!selectedItemForModal) return null;
 
@@ -15,12 +21,21 @@ export const ItemModal = () => {
   const secondaryName = isAr ? item.name : isKu ? item.name : (item.nameAr || item.nameKu);
   const description = isAr ? (item.descriptionAr || item.description) : isKu ? (item.descriptionKu || item.description) : item.description;
 
+  const hasSizes = Array.isArray(item.sizes) && item.sizes.length > 0;
+  const selectedSize = hasSizes ? item.sizes[selectedSizeIndex] || item.sizes[0] : null;
+  const activePrice = selectedSize ? Number(selectedSize.price) : Number(item.price);
+
   const getTagLabel = (tag) => {
     if (tag === 'Best Seller') return isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Seller';
     if (tag === 'Spicy') return isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy';
     if (tag === 'Chef Special') return isAr ? 'توقيع الشيف' : isKu ? 'تایبەتی شێف' : 'Chef Special';
     if (tag === 'New') return isAr ? 'جديد' : isKu ? 'نوێ' : 'New';
     return tag;
+  };
+
+  const handleAddCurrentToCart = () => {
+    addToCart(item, 1, '', selectedSize);
+    setSelectedItemForModal(null);
   };
 
   return (
@@ -69,7 +84,7 @@ export const ItemModal = () => {
                 {name}
               </h2>
               <span className="text-xl font-black text-[#f5a623] tabular-nums flex-shrink-0">
-                {formatPrice(item.price)}
+                {formatPrice(activePrice)}
               </span>
             </div>
 
@@ -79,6 +94,41 @@ export const ItemModal = () => {
               </p>
             )}
           </div>
+
+          {/* SIZES SELECTION SECTION (if item has sizes) */}
+          {hasSizes && (
+            <div className="space-y-2 pt-1">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-gray-300">
+                <Layers className="w-3.5 h-3.5 text-[#f5a623]" />
+                <span>{isAr ? 'اختر الحجم المطلوب:' : isKu ? 'قەبارەی دڵخواز هەڵبژێرە:' : 'Select Size:'}</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {item.sizes.map((s, idx) => {
+                  const isSelected = selectedSizeIndex === idx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setSelectedSizeIndex(idx)}
+                      className={`p-3 rounded-xl border text-left rtl:text-right transition-all flex flex-col justify-between ${
+                        isSelected
+                          ? 'bg-[#2d1217] border-[#f5a623] text-white shadow-md ring-1 ring-[#f5a623]'
+                          : 'bg-[#220f13] border-[#3d1820] text-gray-300 hover:border-gray-500'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 w-full">
+                        <span className="text-xs font-bold">{s.name}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-[#f5a623]" />}
+                      </div>
+                      <span className="text-xs font-black text-[#f5a623] mt-1.5 tabular-nums">
+                        {formatPrice(s.price)}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {description && (
             <div className="bg-[#220f13] p-3.5 rounded-xl border border-[#3d1820]">
@@ -109,13 +159,29 @@ export const ItemModal = () => {
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 bg-[#14080a] border-t border-[#311318] flex items-center justify-end">
+        <div className="p-4 bg-[#14080a] border-t border-[#311318] flex items-center gap-2.5">
           <button
             onClick={() => setSelectedItemForModal(null)}
-            className="w-full py-2.5 px-4 rounded-xl bg-[#261116] hover:bg-[#35171e] text-white font-bold text-xs sm:text-sm border border-[#441a24] transition-all"
+            className="py-2.5 px-4 rounded-xl bg-[#261116] hover:bg-[#35171e] text-zinc-300 font-bold text-xs sm:text-sm border border-[#441a24] transition-all"
           >
             {isAr ? 'إغلاق' : isKu ? 'داخستن' : 'Close'}
           </button>
+
+          {item.inStock !== false && (
+            <button
+              onClick={handleAddCurrentToCart}
+              className="flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#ba181b] to-[#c2410c] hover:from-[#d90429] hover:to-[#ea580c] text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2"
+            >
+              <ShoppingBag className="w-4 h-4" />
+              <span>
+                {isAr
+                  ? `إضافة إلى السلة (${formatPrice(activePrice)})`
+                  : isKu
+                  ? `خستنە ناو سەبەتە (${formatPrice(activePrice)})`
+                  : `Add to Bag (${formatPrice(activePrice)})`}
+              </span>
+            </button>
+          )}
         </div>
       </div>
     </div>

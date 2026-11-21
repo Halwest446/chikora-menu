@@ -1,6 +1,6 @@
 import React from 'react';
 import { useMenu } from '../context/MenuContext';
-import { Flame, Star, Sparkles, Eye } from 'lucide-react';
+import { Flame, Star, Sparkles, Eye, Layers } from 'lucide-react';
 
 export const MenuCard = ({ item }) => {
   const { lang, formatPrice, setSelectedItemForModal } = useMenu();
@@ -12,6 +12,8 @@ export const MenuCard = ({ item }) => {
   const description = isAr ? (item.descriptionAr || item.description) : isKu ? (item.descriptionKu || item.description) : item.description;
 
   const isOutOfStock = item.inStock === false;
+  const hasSizes = Array.isArray(item.sizes) && item.sizes.length > 0;
+  const displayPrice = hasSizes ? Math.min(...item.sizes.map((s) => Number(s.price))) : item.price;
 
   const getTagLabel = (tag) => {
     if (tag === 'Best Seller') return isAr ? 'الأكثر طلباً' : isKu ? 'پڕفرۆشترین' : 'Best Seller';
@@ -62,6 +64,13 @@ export const MenuCard = ({ item }) => {
               <span>{isAr ? 'حار' : isKu ? 'تیژ' : 'Spicy'}</span>
             </span>
           )}
+
+          {hasSizes && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-black/80 backdrop-blur-md text-[#f5a623] border border-[#f5a623]/40 shadow-md">
+              <Layers className="w-3 h-3 text-[#f5a623]" />
+              <span>{item.sizes.map((s) => s.name).join(' / ')}</span>
+            </span>
+          )}
         </div>
 
         {/* Out of Stock Notice */}
@@ -108,10 +117,12 @@ export const MenuCard = ({ item }) => {
         <div className="pt-3 border-t border-[#291318] flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-              {isAr ? 'السعر' : isKu ? 'نرخ' : 'Price'}
+              {hasSizes
+                ? (isAr ? 'يبدأ من' : isKu ? 'دەستپێک لە' : 'Starts from')
+                : (isAr ? 'السعر' : isKu ? 'نرخ' : 'Price')}
             </span>
             <span className="text-base sm:text-lg font-black text-[#f5a623] tabular-nums tracking-tight">
-              {formatPrice(item.price)}
+              {formatPrice(displayPrice)}
             </span>
           </div>
 

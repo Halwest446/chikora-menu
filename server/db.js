@@ -94,9 +94,17 @@ export const initDb = async () => {
       tag TEXT,
       isSpicy INTEGER DEFAULT 0,
       inStock INTEGER DEFAULT 1,
+      sizes TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
+
+  // Migration: Ensure 'sizes' column exists for existing databases
+  try {
+    await runQuery('ALTER TABLE items ADD COLUMN sizes TEXT');
+  } catch (e) {
+    // Column already exists, safe to ignore
+  }
 
   await runQuery(`
     CREATE TABLE IF NOT EXISTS settings (

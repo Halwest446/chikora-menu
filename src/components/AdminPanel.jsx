@@ -86,6 +86,8 @@ export const AdminPanel = () => {
   const [formNameAr, setFormNameAr] = useState('');
   const [formCategory, setFormCategory] = useState('buckets');
   const [formPrice, setFormPrice] = useState('');
+  const [formHasSizes, setFormHasSizes] = useState(false);
+  const [formSizes, setFormSizes] = useState([]);
   const [formImage, setFormImage] = useState('');
   const [formDescription, setFormDescription] = useState('');
   const [formDescriptionKu, setFormDescriptionKu] = useState('');
@@ -193,6 +195,8 @@ export const AdminPanel = () => {
     setFormNameAr('');
     setFormCategory(categories[1]?.id || 'chikora');
     setFormPrice('');
+    setFormHasSizes(false);
+    setFormSizes([]);
     setFormImage('');
     setFormDescription('');
     setFormDescriptionKu('');
@@ -212,6 +216,13 @@ export const AdminPanel = () => {
     setFormNameAr(item.nameAr || '');
     setFormCategory(item.category || 'buckets');
     setFormPrice(item.price || '');
+    if (item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0) {
+      setFormHasSizes(true);
+      setFormSizes(item.sizes.map((s) => ({ name: s.name || '', price: s.price || '' })));
+    } else {
+      setFormHasSizes(false);
+      setFormSizes([]);
+    }
     setFormImage(item.image || '');
     setFormDescription(item.description || '');
     setFormDescriptionKu(item.descriptionKu || '');
@@ -221,6 +232,34 @@ export const AdminPanel = () => {
     setFormInStock(item.inStock !== false);
     setFormError('');
     setIsItemModalOpen(true);
+  };
+
+  // Size row handlers
+  const handleToggleSizes = (checked) => {
+    setFormHasSizes(checked);
+    if (checked && formSizes.length === 0) {
+      // Default to 2 initial variation rows matching user example (e.g. 27 cm & 30 cm)
+      setFormSizes([
+        { name: '27 cm', price: formPrice || '60000' },
+        { name: '30 cm', price: '10000' },
+      ]);
+    }
+  };
+
+  const handleAddSizeRow = (name = '', price = '') => {
+    setFormSizes((prev) => [...prev, { name, price }]);
+  };
+
+  const handleUpdateSizeRow = (index, field, value) => {
+    setFormSizes((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+
+  const handleRemoveSizeRow = (index) => {
+    setFormSizes((prev) => prev.filter((_, i) => i !== index));
   };
 
   // Compress and resize image client-side to prevent localStorage quota issues & handle any file size
@@ -295,9 +334,31 @@ export const AdminPanel = () => {
       setFormError(isKu ? 'تکایە ناوی خواردنەکە بنووسە' : 'Item name is required.');
       return;
     }
-    if (!formPrice || Number(formPrice) <= 0) {
-      setFormError(isKu ? 'تکایە نرخێکی دروست بنووسە' : 'Please enter a valid price.');
-      return;
+
+    let finalPrice = Number(formPrice) || 0;
+    let finalSizes = [];
+
+    if (formHasSizes) {
+      finalSizes = formSizes
+        .map((s) => ({ name: (s.name || '').trim(), price: Number(s.price) || 0 }))
+        .filter((s) => s.name && s.price > 0);
+
+      if (finalSizes.length === 0) {
+        setFormError(
+          isKu
+            ? 'تکایە لانیکەم یەک قەبارە و نرخ بنووسە (بۆ نموونە: 27 cm بە 60000)'
+            : isAr
+            ? 'يرجى إدخال حجم وسعر واحد على الأقل (مثال: 27 سم بسعر 60000)'
+            : 'Please enter at least one size and price (e.g. 27 cm with 60000).'
+        );
+        return;
+      }
+      finalPrice = Math.min(...finalSizes.map((s) => s.price));
+    } else {
+      if (!formPrice || Number(formPrice) <= 0) {
+        setFormError(isKu ? 'تکایە نرخێکی دروست بنووسە' : 'Please enter a valid price.');
+        return;
+      }
     }
 
     const finalImage = formImage || '/chikora-logo.jpeg';
@@ -307,7 +368,8 @@ export const AdminPanel = () => {
       nameKu: formNameKu.trim() || formName.trim(),
       nameAr: formNameAr.trim() || formNameKu.trim() || formName.trim(),
       category: formCategory,
-      price: Number(formPrice),
+      price: finalPrice,
+      sizes: finalSizes,
       image: finalImage,
       description: formDescription.trim(),
       descriptionKu: formDescriptionKu.trim() || formDescription.trim(),
@@ -728,7 +790,19 @@ export const AdminPanel = () => {
 
                           {/* Price */}
                           <td className="py-3 px-4 font-bold text-white tabular-nums">
-                            {formatPrice(item.price)}
+                            {item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0 ? (
+                              <div>
+                                <span className="text-amber-400">
+                                  {formatPrice(Math.min(...item.sizes.map((s) => Number(s.price))))}
+                                </span>
+                                <span className="block text-[10px] text-zinc-400 font-normal">
+                                  {item.sizes.length} {isKu ? 'قەبارە' : isAr ? 'أحجام' : 'sizes'} (
+                                  {item.sizes.map((s) => s.name).join(', ')})
+                                </span>
+                              </div>
+                            ) : (
+                              formatPrice(item.price)
+                            )}
                           </td>
 
                           {/* Tag */}
@@ -1289,14 +1363,24 @@ export const AdminPanel = () => {
                   </label>
                   <input
                     type="number"
-                    required
+                    required={!formHasSizes}
+                    disabled={formHasSizes}
                     min="0"
                     step="any"
                     dir="ltr"
-                    placeholder="e.g. 7500"
-                    value={formPrice}
+                    placeholder={formHasSizes ? (isKu ? 'بەپێی کەمترین قەبارە دیاری دەکرێت' : isAr ? 'يحدد حسب أقل حجم' : 'Calculated from minimum size') : 'e.g. 7500'}
+                    value={
+                      formHasSizes
+                        ? (() => {
+                            const validPrices = formSizes.map((s) => Number(s.price) || 0).filter((p) => p > 0);
+                            return validPrices.length > 0 ? Math.min(...validPrices) : '';
+                          })()
+                        : formPrice
+                    }
                     onChange={(e) => setFormPrice(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                    className={`w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50 ${
+                      formHasSizes ? 'opacity-60 cursor-not-allowed' : ''
+                    }`}
                   />
                 </div>
 
@@ -1316,6 +1400,112 @@ export const AdminPanel = () => {
                     <option value="New">New</option>
                   </select>
                 </div>
+              </div>
+
+              {/* MULTIPLE SIZES / VARIATIONS CHECKBOX SECTION */}
+              <div className="bg-zinc-950/70 border border-white/[0.08] rounded-xl p-3.5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={formHasSizes}
+                      onChange={(e) => handleToggleSizes(e.target.checked)}
+                      className="w-4 h-4 rounded text-amber-500 bg-zinc-900 border-zinc-700 focus:ring-amber-500 focus:ring-offset-zinc-950"
+                    />
+                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                      <Layers className="w-3.5 h-3.5 text-amber-400" />
+                      <span>
+                        {isAr
+                          ? 'تحديد أحجام وأسعار مختلفة (مثل: بيتزا 27 سم، 30 سم)'
+                          : isKu
+                          ? 'قەبارە و نرخی جیاواز (وەک: پیتزا ٢٧ سم، ٣٠ سم)'
+                          : 'Multiple Sizes & Prices (e.g. Pizza 27 cm, 30 cm)'}
+                      </span>
+                    </span>
+                  </label>
+
+                  {formHasSizes && (
+                    <button
+                      type="button"
+                      onClick={() => handleAddSizeRow('', '')}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>{isKu ? 'زیادکردنی قەبارە' : isAr ? 'إضافة حجم' : 'Add Size'}</span>
+                    </button>
+                  )}
+                </div>
+
+                {formHasSizes && (
+                  <div className="space-y-2.5 pt-1">
+                    {/* Quick Helper Presets */}
+                    <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-zinc-400">
+                      <span>{isKu ? 'نموونەی ئامادە:' : isAr ? 'أمثلة سريعة:' : 'Quick Presets:'}</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormSizes([
+                            { name: '27 cm', price: '60000' },
+                            { name: '30 cm', price: '10000' },
+                          ]);
+                        }}
+                        className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] border border-white/10"
+                      >
+                        27 cm (60,000) & 30 cm (10,000)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFormSizes([
+                            { name: 'Small / بچووک', price: '5000' },
+                            { name: 'Medium / مامناوەند', price: '8000' },
+                            { name: 'Large / گەورە', price: '12000' },
+                          ]);
+                        }}
+                        className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-[10px] border border-white/10"
+                      >
+                        Small / Medium / Large
+                      </button>
+                    </div>
+
+                    {/* Dynamic Size Rows */}
+                    <div className="space-y-2">
+                      {formSizes.map((sz, idx) => (
+                        <div key={idx} className="flex items-center gap-2 bg-zinc-900/90 p-2 rounded-lg border border-white/[0.06]">
+                          <div className="flex-1">
+                            <input
+                              type="text"
+                              placeholder={isKu ? 'ناوی قەبارە (وەک: 27 cm)' : 'Size name (e.g. 27 cm)'}
+                              value={sz.name}
+                              onChange={(e) => handleUpdateSizeRow(idx, 'name', e.target.value)}
+                              className="w-full bg-zinc-950 border border-white/[0.08] rounded-md px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                            />
+                          </div>
+                          <div className="w-36">
+                            <input
+                              type="number"
+                              min="0"
+                              step="any"
+                              dir="ltr"
+                              placeholder={isKu ? `نرخ (${restaurantInfo.currency})` : `Price (${restaurantInfo.currency})`}
+                              value={sz.price}
+                              onChange={(e) => handleUpdateSizeRow(idx, 'price', e.target.value)}
+                              className="w-full bg-zinc-950 border border-white/[0.08] rounded-md px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-amber-500/50"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSizeRow(idx)}
+                            className="p-1.5 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-800 transition-colors"
+                            title="Remove Size"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* IMAGE UPLOAD SECTION */}
